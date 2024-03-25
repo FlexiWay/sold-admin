@@ -3,6 +3,8 @@ import "../styles/globals.css";
 import AppBar from '../components/layout/AppBar';
 import Footer from '../components/layout/Footer';
 import LayoutWrapper from './LayoutWrapper';
+import NewAppBar from '../components/shared/NewAppBar';
+import Sidebar from '../components/shared/Sidebar';
 
 
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -18,11 +20,15 @@ export default async function RootLayout({ children }: any) {
     <LayoutWrapper >
       <html lang="en">
         <body>
-          <AppBar />
-          <main className={`min-h-screen`}>
-            {children}
-          </main>
-          <Footer />
+          {/* <AppBar /> */}
+          <Sidebar />
+          <div className="lg:pl-72">
+            <NewAppBar />
+            <main className="py-10">
+              <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+            </main>
+          </div>
+          {/* <Footer /> */}
           <Toaster position="bottom-right" />
         </body>
       </html>

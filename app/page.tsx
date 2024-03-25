@@ -5,7 +5,7 @@ import Link from 'next/link';
 const Index: React.FC = async () => {
 
   return (
-    <div className='w-full h-screen flex justify-center items-center '>
+    <div className='w-full flex justify-center items-center' style={{ height: 'calc(100vh - 142px)' }}>
       {/* Intro Content */}
       <div className="max-w-md bg-transparent  text-black dark:text-white rounded-lg shadow-lg border border-0.5 border-gray-300 dark:border-gray-800 p-[1.25rem]">
         <div className="flex flex-col justify-center p-4 bg-inherit gap-10">

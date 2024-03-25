@@ -56,7 +56,7 @@ body {
   font-family: 'Inter', sans-serif;
     @apply bg-light-mesh dark:bg-mesh text-black dark:text-white selection:bg-builderz-blue selection:text-white selection:px-4 dark:selection:text-black;
   /* margin: 0; */
-  height: 100vh;
+
   /* Fluid Fonts */
   font-size: calc(16px + (16 - 16) * ((100vw - 320px) / (1280 - 320)));
   font-style: normal;
@@ -91,7 +91,7 @@ h3 {
 /* Scrollbar styles */
 /* width */
 body::-webkit-scrollbar {
-  width: 8px;
+  width: 0px;
   background-color: var(--chakra-colors-transparent);
 }
 
