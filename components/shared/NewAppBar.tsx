@@ -16,6 +16,9 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import MyMultiButton from '../layout/MyMultiButton'
+import { Logo } from '../Logo'
+
 
 
 const userNavigation = [
@@ -31,17 +34,19 @@ const NewAppBar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-      <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
+    <>
+      <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 border-opacity-20 bg-brand-bg px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        {/* <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
         <span className="sr-only">Open sidebar</span>
         <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-      </button>
+      </button> */}
+        {/* <Logo /> */}
 
-      {/* Separator */}
-      <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+        {/* Separator */}
+        {/* <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" /> */}
 
-      <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-        <form className="relative flex flex-1" action="#" method="GET">
+        <div className="flex flex-1 items-center justify-end gap-x-4 self-stretch lg:gap-x-6">
+          {/* <form className="relative flex flex-1" action="#" method="GET">
           <label htmlFor="search-field" className="sr-only">
             Search
           </label>
@@ -56,18 +61,18 @@ const NewAppBar = () => {
             type="search"
             name="search"
           />
-        </form>
-        <div className="flex items-center gap-x-4 lg:gap-x-6">
-          <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+        </form> */}
+          <div className="flex items-center gap-x-4 lg:gap-x-6">
+            {/* <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
             <span className="sr-only">View notifications</span>
             <BellIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
+          </button> */}
 
-          {/* Separator */}
-          <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
-
-          {/* Profile dropdown */}
-          <Menu as="div" className="relative">
+            {/* Separator */}
+            {/* <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" /> */}
+            <MyMultiButton />
+            {/* Profile dropdown */}
+            {/* <Menu as="div" className="relative">
             <Menu.Button className="-m-1.5 flex items-center p-1.5">
               <span className="sr-only">Open user menu</span>
               <img
@@ -109,10 +114,11 @@ const NewAppBar = () => {
                 ))}
               </Menu.Items>
             </Transition>
-          </Menu>
+          </Menu> */}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

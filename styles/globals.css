@@ -1,3 +1,4 @@
+
 /* Importing Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -14,10 +15,10 @@
 }
 
 /* Next.js container */
-/* #__next {
+#__next {
   width: 100%;
   min-height: 100vh;
-} */
+}
 
 /* Inherit fonts for inputs and buttons */
 input,
@@ -42,7 +43,7 @@ select {
 
 /* Active navigation link */
 .active {
-  @apply text-[#43b083] dark:text-[#14F195];
+  @apply text-builderz-green dark:text-builderz-green;
 }
 
 /* Custom Wallet Button */
@@ -53,16 +54,23 @@ select {
 
 /* Body styles */
 body {
+  @apply bg-brand-image bg-center bg-cover bg-no-repeat text-white selection:bg-builderz-blue selection:text-white ;
   font-family: 'Inter', sans-serif;
-    @apply bg-light-mesh dark:bg-mesh text-black dark:text-white selection:bg-builderz-blue selection:text-white selection:px-4 dark:selection:text-black;
   /* margin: 0; */
-
+  height: calc(100vh);
   /* Fluid Fonts */
   font-size: calc(16px + (16 - 16) * ((100vw - 320px) / (1280 - 320)));
   font-style: normal;
   font-weight: 400;
   letter-spacing: 125%;
   line-height: 135%;
+}
+
+.mainCTA {
+  @apply bg-builderz-green py-2 px-4 rounded-md text-white hover:bg-white hover:text-builderz-green transition-all duration-300 ease-in-out;
+}
+.secondaryCTA {
+  @apply bg-white text-builderz-green py-2 px-4 rounded-md hover:bg-builderz-green hover:text-white transition-all duration-300 ease-in-out;
 }
 
 /* Heading styles */

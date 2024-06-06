@@ -1,7 +1,5 @@
 import { Toaster } from 'sonner';
 import "../styles/globals.css";
-import AppBar from '../components/layout/AppBar';
-import Footer from '../components/layout/Footer';
 import LayoutWrapper from './LayoutWrapper';
 import NewAppBar from '../components/shared/NewAppBar';
 import Sidebar from '../components/shared/Sidebar';
@@ -19,7 +17,7 @@ export default async function RootLayout({ children }: any) {
   return (
     <LayoutWrapper >
       <html lang="en">
-        <body>
+        <body className='relative'>
           {/* <AppBar /> */}
           <Sidebar />
           <div className="lg:pl-72">
