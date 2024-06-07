@@ -23,7 +23,8 @@ module.exports = {
       },
          backgroundImage: {
          'brand-image': "url('/background.webp')",
-        'card-bg': "linear-gradient(to top, #101010, transparent)",
+         'texture-bg': "url('/texture-bg.svg')",
+        'card-bg': "linear-gradient(to top, #101010, #101010)",
         'card-bgModal': "linear-gradient(to top, #101010, transparent)",
       },
       backgroundColor: {

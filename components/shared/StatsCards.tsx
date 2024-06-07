@@ -13,7 +13,7 @@ const StatCard = ({ title, number }: any) => {
 
   return (
     <>
-      <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center">
+      <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-20">
         <span className='text-xl font-black -mt-2'>{formattedNumber}</span>
         <span className='opacity-60'>Total {title}</span>
       </div>

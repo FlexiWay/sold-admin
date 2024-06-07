@@ -3,7 +3,7 @@ import React from 'react'
 export const DepositWithdraw = ({ deposit, withdraw }: any) => {
   return (
     <>
-      <div className="w-full flex flex-col items-center justify-center gap-2 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center">
+      <div className="w-full flex flex-col items-center justify-center gap-2 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-20">
         <span className='text-xl font-black -mt-2'>Deposit/Withdraw</span>
         <div className="max-w-md mx-auto">
           <input type="text" placeholder="Type here" className="input input-bordered w-full " />

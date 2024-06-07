@@ -54,7 +54,7 @@ select {
 
 /* Body styles */
 body {
-  @apply bg-brand-image bg-center bg-cover bg-no-repeat text-white selection:bg-builderz-blue selection:text-white ;
+  @apply bg-texture-bg bg-center bg-cover bg-no-repeat text-white selection:bg-builderz-blue selection:text-white ;
   font-family: 'Inter', sans-serif;
   /* margin: 0; */
   height: calc(100vh);

@@ -1,7 +1,7 @@
 export const PauseUnpause = ({ active, setActive }: any) => {
   return (
     <>
-      <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center">
+      <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-20">
         <span className='text-xl font-black -mt-2'>Pause/Unpause</span>
         <div className="w-full flex items-center justify-center">
           <div className="rounded-full bg-black p-4">

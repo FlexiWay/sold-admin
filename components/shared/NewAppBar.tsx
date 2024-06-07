@@ -40,7 +40,7 @@ const NewAppBar = () => {
         <span className="sr-only">Open sidebar</span>
         <Bars3Icon className="h-6 w-6" aria-hidden="true" />
       </button> */}
-        {/* <Logo /> */}
+        <Logo />
 
         {/* Separator */}
         {/* <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" /> */}

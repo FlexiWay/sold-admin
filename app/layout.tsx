@@ -19,10 +19,10 @@ export default async function RootLayout({ children }: any) {
       <html lang="en">
         <body className='relative'>
           {/* <AppBar /> */}
-          <Sidebar />
-          <div className="lg:pl-72">
+          {/* <Sidebar /> */}
+          <div className="">
             <NewAppBar />
-            <main className="py-10">
+            <main className="py-10 ">
               <div className="px-4 sm:px-6 lg:px-8">{children}</div>
             </main>
           </div>
@@ -34,3 +34,6 @@ export default async function RootLayout({ children }: any) {
 
   );
 }
+
+
+// lg: pl - 72
