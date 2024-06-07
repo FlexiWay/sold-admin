@@ -44,7 +44,7 @@ export default function WhitelistUpdate() {
 
   return (
     <>
-      <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-20">
+      <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
         <span className='text-xl font-black -mt-2'>Whitelist Update</span>
         <div className="max-w-md mx-auto">
           <div className="w-full flex items-center justify-center gap-4 mt-4">

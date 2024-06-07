@@ -14,6 +14,8 @@ module.exports = {
         "brand-bg": "#101010",
         "builderz-green": "#EF5323",
         "builderz-blue": "#EF5323",
+            "brand-main": "#EF5323",
+        "brand-secondary": "#6EC7FD",
       },
       animation: {
 
