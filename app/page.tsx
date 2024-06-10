@@ -1,6 +1,7 @@
 import SecondRow from '../components/shared/SecondRow';
 import StatsCards from '../components/shared/StatsCards';
 import ThirdRow from '../components/shared/ThirdRow';
+import YieldUpdate from '../components/shared/YieldUpdate';
 
 
 const Index: React.FC = () => {
@@ -26,6 +27,8 @@ const Index: React.FC = () => {
           <SecondRow />
           {/* third row */}
           <ThirdRow />
+          {/* yield update */}
+          {/* <YieldUpdate /> */}
         </div>
       </section >
     </>

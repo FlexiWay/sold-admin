@@ -25,11 +25,11 @@ const UpdateModal = ({ open, setOpen }: any) => {
             </button>
           </div>
           <div className="w-full flex flex-col items-center justify-center gap-4 mt-4">
-            <textarea className="textarea textarea-bordered w-full" placeholder="
+            <textarea className="textarea textarea-bordered w-full bg-transparent" placeholder="
             Paste the updated .json to whitelist here...
             "></textarea>
             <div className="w-full flex items-center justify-between gap-4 mt-4">
-              <button className='mainCTA w-full'>Update</button>
+              <button className='secondaryCTA w-full'>Update</button>
               {/* <button className='secondaryCTA'>Reset</button> */}
             </div>
           </div>
@@ -48,7 +48,7 @@ export default function WhitelistUpdate() {
         <span className='text-xl font-black -mt-2'>Whitelist Update</span>
         <div className="max-w-md mx-auto">
           <div className="w-full flex items-center justify-center gap-4 mt-4">
-            <button className='mainCTA' onClick={() => setOpen(true)}>Update</button>
+            <button className='secondaryCTA' onClick={() => setOpen(true)}>Update</button>
             {/* <button className='secondaryCTA'>Withdraw</button> */}
           </div>
         </div>
