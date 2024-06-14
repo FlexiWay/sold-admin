@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 
-export default function YieldUpdate() {
+export function YieldUpdate() {
   const [inputValue, setInputValue] = useState(''); // Changed to string to allow empty input
   const [yieldValue, setYieldValue] = useState(0); // State to hold the updated yield value
 

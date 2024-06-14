@@ -1,10 +1,39 @@
+"use client"
+
+import { useWallet } from '@solana/wallet-adapter-react';
 import SecondRow from '../components/shared/SecondRow';
 import StatsCards from '../components/shared/StatsCards';
 import ThirdRow from '../components/shared/ThirdRow';
-import YieldUpdate from '../components/shared/YieldUpdate';
+import { useSold } from '../hooks/useSold';
+import Setup from '../components/shared/Setup';
 
 
 const Index: React.FC = () => {
+
+  const wallet = useWallet();
+  const sold = useSold();
+
+  console.log(sold);
+
+  // TODO: Wallet Check
+  if (!wallet.connected) {
+    return <div className='flex items-center justify-center '>
+      <p>Please connect your wallet</p>
+    </div>
+  }
+
+  if (sold.loading) {
+    return <div className='flex items-center justify-center '>
+      <p>Loading...</p>
+    </div>
+  }
+
+  if (!sold.poolManager && !sold.tokenManager) {
+    return <div className='flex flex-col space-y-4 items-center justify-center '>
+      <p>System needs to be initialized</p>
+      <Setup />
+    </div>
+  }
 
   return (
     <>
@@ -28,7 +57,6 @@ const Index: React.FC = () => {
           {/* third row */}
           <ThirdRow />
           {/* yield update */}
-          {/* <YieldUpdate /> */}
         </div>
       </section >
     </>
