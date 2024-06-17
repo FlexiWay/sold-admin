@@ -27,7 +27,7 @@ export default async function RootLayout({ children }: any) {
             </main>
           </div>
           {/* <Footer /> */}
-          <Toaster position="bottom-right" />
+          <Toaster position="bottom-right" theme='dark' />
         </body>
       </html>
     </LayoutWrapper>

@@ -7,6 +7,9 @@ import ThirdRow from '../components/shared/ThirdRow';
 import { useSold } from '../hooks/useSold';
 import Setup from '../components/shared/Setup';
 
+const admins = [
+  "9JpUDuhoordi6Cs1adEamepYu8zqt8fgYbpHHHoCDZ6r"
+]
 
 const Index: React.FC = () => {
 
@@ -18,19 +21,25 @@ const Index: React.FC = () => {
   // TODO: Wallet Check
   if (!wallet.connected) {
     return <div className='flex items-center justify-center '>
-      <p>Please connect your wallet</p>
+      <h1>Please connect your wallet</h1>
     </div>
   }
 
+  // if (!admins.includes(wallet.publicKey?.toBase58() || "")) {
+  //   return <div className='flex items-center justify-center '>
+  //     <h1>Unauthorized Access</h1>
+  //   </div>
+  // }
+
   if (sold.loading) {
     return <div className='flex items-center justify-center '>
-      <p>Loading...</p>
+      <h1>Loading...</h1>
     </div>
   }
 
   if (!sold.poolManager && !sold.tokenManager) {
-    return <div className='flex flex-col space-y-4 items-center justify-center '>
-      <p>System needs to be initialized</p>
+    return <div className='flex flex-col space-y-4 items-center justify-center w-full container'>
+      <h1>System needs to be initialized</h1>
       <Setup />
     </div>
   }
