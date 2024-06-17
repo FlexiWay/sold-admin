@@ -72,65 +72,65 @@ const Setup: React.FC = () => {
                 )}
             </div>
 
-            {createQuoteMint && <>
 
-                <form onSubmit={handleSetup}>
-                    <div className="w-full grid gird-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Base Mint Name
-                            <input type="text" name="baseMintName" value={setupOptions.baseMintName} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Base Mint Symbol
-                            <input type="text" name="baseMintSymbol" value={setupOptions.baseMintSymbol} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Base Mint URI
-                            <input type="text" name="baseMintUri" value={setupOptions.baseMintUri} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Base Mint Decimals
-                            <input type="number" name="baseMintDecimals" value={setupOptions.baseMintDecimals} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            xMint Decimals
-                            <input type="number" name="xMintDecimals" value={setupOptions.xMintDecimals} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            <div className="flex gap-2">
-                                <span>Quote Mint</span> <span className="text-xs text-red-500">*</span></div>
-                            <input required type="text" name="quoteMint" value={setupOptions.quoteMint || ''} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Exchange Rate
-                            <input type="number" name="exchangeRate" value={setupOptions.exchangeRate} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Staking Initial Exchange Rate
-                            <input type="number" name="stakingInitialExchangeRate" value={setupOptions.stakingInitialExchangeRate} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Emergency Fund Basis Points
-                            <input type="number" name="emergencyFundBasisPoints" value={setupOptions.emergencyFundBasisPoints} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Mint Limit Per Slot
-                            <input type="number" name="mintLimitPerSlot" value={setupOptions.mintLimitPerSlot} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Redemption Limit Per Slot
-                            <input type="number" name="redemptionLimitPerSlot" value={setupOptions.redemptionLimitPerSlot} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                        </label>
-                        <label className="flex flex-col gap-2 items-start justify-start">
-                            Allow List (comma-separated public keys)
-                            <textarea name="allowList" value={setupOptions.allowList.join(', ')} onChange={handleInputChange} className="textarea textarea-bordered w-full bg-transparent" placeholder="Enter public keys separated by commas"></textarea>
-                        </label>
-                        <div className="w-full flex items-center justify-center md:col-span-2 lg:col-span-3">
-                            <button type="submit" className="secondaryCTA flex-grow">Initialize System</button>
-                        </div>
+
+            <form onSubmit={handleSetup}>
+                <div className="w-full grid gird-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Base Mint Name
+                        <input type="text" name="baseMintName" value={setupOptions.baseMintName} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Base Mint Symbol
+                        <input type="text" name="baseMintSymbol" value={setupOptions.baseMintSymbol} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Base Mint URI
+                        <input type="text" name="baseMintUri" value={setupOptions.baseMintUri} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Base Mint Decimals
+                        <input type="number" name="baseMintDecimals" value={setupOptions.baseMintDecimals} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        xMint Decimals
+                        <input type="number" name="xMintDecimals" value={setupOptions.xMintDecimals} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        <div className="flex gap-2">
+                            <span>Quote Mint</span> <span className="text-xs text-red-500">*</span></div>
+                        <input required type="text" name="quoteMint" value={setupOptions.quoteMint || ''} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Exchange Rate
+                        <input type="number" name="exchangeRate" value={setupOptions.exchangeRate} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Staking Initial Exchange Rate
+                        <input type="number" name="stakingInitialExchangeRate" value={setupOptions.stakingInitialExchangeRate} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Emergency Fund Basis Points
+                        <input type="number" name="emergencyFundBasisPoints" value={setupOptions.emergencyFundBasisPoints} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Mint Limit Per Slot
+                        <input type="number" name="mintLimitPerSlot" value={setupOptions.mintLimitPerSlot} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Redemption Limit Per Slot
+                        <input type="number" name="redemptionLimitPerSlot" value={setupOptions.redemptionLimitPerSlot} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Allow List (comma-separated public keys)
+                        <textarea name="allowList" value={setupOptions.allowList.join(', ')} onChange={handleInputChange} className="textarea textarea-bordered w-full bg-transparent" placeholder="Enter public keys separated by commas"></textarea>
+                    </label>
+                    <div className="w-full flex items-center justify-center md:col-span-2 lg:col-span-3">
+                        <button type="submit" className="secondaryCTA flex-grow">Initialize System</button>
                     </div>
-                </form>
-            </>}
+                </div>
+            </form>
+
         </div>
     );
 };
