@@ -14,10 +14,12 @@ const Setup: React.FC = () => {
         quoteMint: "",
         exchangeRate: 1.0,
         stakingInitialExchangeRate: 1.0,
-        emergencyFundBasisPoints: 100,
+        emergencyFundBasisPoints: 1000,
         mintLimitPerSlot: 1000,
         redemptionLimitPerSlot: 1000,
-        allowList: []
+        allowList: [],
+        withdrawTimeLock: 3600,
+        withdrawExecutionWindow: 3600
     });
     const [createQuoteMint, setCreateQuoteMint] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -124,6 +126,14 @@ const Setup: React.FC = () => {
                     <label className="flex flex-col gap-2 items-start justify-start">
                         Allow List (comma-separated public keys)
                         <textarea name="allowList" value={setupOptions.allowList.join(', ')} onChange={handleInputChange} className="textarea textarea-bordered w-full bg-transparent" placeholder="Enter public keys separated by commas"></textarea>
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Withdraw Timelock
+                        <input type="number" name="withdrawTimelock" value={setupOptions.withdrawTimeLock} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                    </label>
+                    <label className="flex flex-col gap-2 items-start justify-start">
+                        Withdraw Execution Window
+                        <input type="number" name="withdrawExecutionWindow" value={setupOptions.withdrawExecutionWindow} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
                     </label>
                     <div className="w-full flex items-center justify-center md:col-span-2 lg:col-span-3">
                         <button type="submit" className="secondaryCTA flex-grow">Initialize System</button>
