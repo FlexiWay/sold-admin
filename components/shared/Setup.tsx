@@ -2,7 +2,7 @@ import { SetupOptions } from '@builderz/sold';
 import React, { useState } from 'react';
 import { useSold } from '../../hooks/useSold';
 import { toast } from 'sonner';
-import { Spin } from 'antd';
+import { Spin, Tooltip } from 'antd';
 
 const Setup: React.FC = () => {
     const [setupOptions, setSetupOptions] = useState<SetupOptions>({
@@ -12,8 +12,8 @@ const Setup: React.FC = () => {
         baseMintDecimals: 6,
         xMintDecimals: 6,
         quoteMint: "",
-        exchangeRate: 1.0,
-        stakingInitialExchangeRate: 1.0,
+        exchangeRate: 1 * 10 ** 6, // Has to include quoteMintDecimals
+        stakingInitialExchangeRate: 1 * 10 ** 6, // Has to include quoteMintDecimals
         emergencyFundBasisPoints: 1000,
         mintLimitPerSlot: 1000,
         redemptionLimitPerSlot: 1000,
@@ -105,15 +105,21 @@ const Setup: React.FC = () => {
                     </label>
                     <label className="flex flex-col gap-2 items-start justify-start">
                         Exchange Rate
-                        <input type="number" name="exchangeRate" value={setupOptions.exchangeRate} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                        <div className="flex items-center gap-2">
+                            <input type="number" name="exchangeRate" value={setupOptions.exchangeRate} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                            <Tooltip title="Includes quoteMintDecimals">
+                                <span className="text-gray-500 cursor-help">ℹ️</span>
+                            </Tooltip>
+                        </div>
                     </label>
                     <label className="flex flex-col gap-2 items-start justify-start">
                         Staking Initial Exchange Rate
-                        <input type="number" name="stakingInitialExchangeRate" value={setupOptions.stakingInitialExchangeRate} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
-                    </label>
-                    <label className="flex flex-col gap-2 items-start justify-start">
-                        Emergency Fund Basis Points
-                        <input type="number" name="emergencyFundBasisPoints" value={setupOptions.emergencyFundBasisPoints} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                        <div className="flex items-center gap-2">
+                            <input type="number" name="stakingInitialExchangeRate" value={setupOptions.stakingInitialExchangeRate} onChange={handleInputChange} className="input input-bordered w-full bg-transparent" />
+                            <Tooltip title="Includes quoteMintDecimals">
+                                <span className="text-gray-500 cursor-help">ℹ️</span>
+                            </Tooltip>
+                        </div>
                     </label>
                     <label className="flex flex-col gap-2 items-start justify-start">
                         Mint Limit Per Slot

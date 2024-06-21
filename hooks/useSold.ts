@@ -92,7 +92,7 @@ export const useSold = () => {
     const handleSystemSetup = async (setupOptions: SetupOptions) => {
         try {
             const txBuilderSetup = await setup(umi, setupOptions);
-            const resSetup = await txBuilderSetup.sendAndConfirm(umi, { confirm: { commitment: "finalized" } });
+            const resSetup = await txBuilderSetup.sendAndConfirm(umi, { send: { skipPreflight: true }, confirm: { commitment: "finalized" } });
             console.log(resSetup);
             refetch()
         } catch (error) {
