@@ -48,14 +48,14 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ totalTime, targetTimest
 
   const formatTime = () => {
     //return `${timeLeft.days || 0}:${timeLeft.hours || 0}:${timeLeft.minutes || 0}:${timeLeft.seconds || 0}`;
-    return timerMsg+" "+`${timeLeft.hours || 0}:${timeLeft.minutes || 0}:${timeLeft.seconds || 0}`;
+    return timerMsg+' '+`${timeLeft.hours || 0}:${timeLeft.minutes || 0}:${timeLeft.seconds || 0}`;
 
   };
 
   return (
     <div>
       {isTimeUp ? (
-        <span>Time's up!</span>
+        <span>Times up!</span>
       ) : (
         <div>{formatTime()}</div>
       )}
