@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { DepositWithdraw } from './DepositWithdraw'
 import { PauseUnpause } from './PauseUnpause'
 import { YieldUpdate} from './YieldUpdate'
+import { WithdrawTimeUpdate } from './WithdrawTimeUpdate'
 
 export default function SecondRow() {
   return (
@@ -11,6 +12,7 @@ export default function SecondRow() {
       <DepositWithdraw />
       <PauseUnpause />
       <YieldUpdate />
+      <WithdrawTimeUpdate />
     </div>
   )
 }

@@ -1,8 +1,10 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useSold } from '../../hooks/useSold';
 
 export function YieldUpdate() {
+  const sold = useSold();
   const [inputValue, setInputValue] = useState(''); // Changed to string to allow empty input
   const [yieldValue, setYieldValue] = useState(0); // State to hold the updated yield value
 
@@ -18,13 +20,14 @@ export function YieldUpdate() {
     const numValue = parseInt(inputValue, 10);
     if (!isNaN(numValue)) {
       setYieldValue(numValue); // Update the yieldValue with the current input value if it's a number
+      sold.handleYieldUpdate(numValue);
     }
     setInputValue(''); // Reset input value after updating yield
   }
 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-2 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10 bg-opacity-50 backdrop-blur-xl">
-      <span className='text-xl font-black -mt-2'>Yield Update</span>
+      <span className='text-xl font-black -mt-2'>Yield : {sold.getCurrentYieldPercentage().toString()}%</span>
       <div className="max-w-md mx-auto">
         <div className="w-full flex items-center justify-between gap-4">
           <input
