@@ -1,4 +1,4 @@
-import { safeFetchPoolManager, safeFetchTokenManager, findPoolManagerPda, findTokenManagerPda, PoolManager, TokenManager, createTestQuote, SetupOptions, toggleActive, setup, depositFunds, updateTokenManagerAdmin, updateAnnualYield, SOLD_ISSUANCE_PROGRAM_ID, getMerkleRoot, initializeWithdrawFunds, withdrawFunds,updateTokenManagerOwner } from "@builderz/sold";
+import { safeFetchPoolManager, safeFetchTokenManager, findPoolManagerPda, findTokenManagerPda, PoolManager, TokenManager, createTestQuote, SetupOptions, toggleActive, setup, depositFunds, updateTokenManagerAdmin, updateAnnualYield, SOLD_ISSUANCE_PROGRAM_ID, getMerkleRoot, initializeWithdrawFunds, withdrawFunds, updateTokenManagerOwner } from "@builderz/sold";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -20,6 +20,8 @@ export const useSold = () => {
 
     const [tokenManager, setTokenManager] = useState<TokenManager | null>(null);
     const [poolManager, setPoolManager] = useState<PoolManager | null>(null);
+    const [allowList, setAllowList] = useState<string[]>([]);
+
     const [reset, setReset] = useState(0);
 
     const [statCardData, setStatCardData] = useState<{
@@ -74,6 +76,24 @@ export const useSold = () => {
             fetchState()
         }
     }, [wallet.publicKey, reset])
+
+    useEffect(() => {
+        const fetchAllowList = async () => {
+            try {
+                const response = await fetch('/api/get-allowlist'); // Adjust the endpoint as needed
+                if (!response.ok) {
+                    throw new Error('Failed to fetch allowlist');
+                }
+                const data = await response.json();
+                setAllowList(data.addresses);
+            } catch (error) {
+                console.error("Failed to fetch allowlist:", error);
+                toast("Failed to fetch allowlist");
+            }
+        };
+
+        fetchAllowList();
+    }, [reset]);
 
     const refetch = () => {
         setReset(prev => prev + 1);
@@ -333,13 +353,13 @@ export const useSold = () => {
         }
     };
 
-    const handleUpdateAuthority = async (newAllowedWallets:any) => {
+    const handleUpdateAuthority = async (newAllowedWallets: any) => {
         try {
             if (!tokenManager) {
                 throw new Error("Token Manager is not set");
             }
 
-           // const newAllowedWallets = ["4GG9RNpVhhH5Q6oqQtMs9wqmeuQBTeVQbXfWyJRJJHv6"];
+            // const newAllowedWallets = ["4GG9RNpVhhH5Q6oqQtMs9wqmeuQBTeVQbXfWyJRJJHv6"];
             //const originalMerkleRoot=tokenManager.merkleRoot;
             console.log(newAllowedWallets);
             const newMerkleRoot = getMerkleRoot(newAllowedWallets);
@@ -371,13 +391,13 @@ export const useSold = () => {
         }
     }
 
-    const handleWithdrawTimeUpdate=async(LockTimeSecs:number|null,excutionTimeSecs:number|null)=>{
+    const handleWithdrawTimeUpdate = async (LockTimeSecs: number | null, excutionTimeSecs: number | null) => {
         try {
             let txBuilder = new TransactionBuilder()
 
             txBuilder = txBuilder.add(updateTokenManagerOwner(umi, {
                 tokenManager: tokenManagerPubKey,
-                owner:umi.identity,
+                owner: umi.identity,
                 newWithdrawTimeLock: LockTimeSecs,
                 newOwner: null,
                 newAdmin: null,
@@ -399,5 +419,30 @@ export const useSold = () => {
         }
     }
 
-    return { tokenManager, poolManager, refetch, loading, createTestQuoteMint, handleSystemSetup, handleToggleActive, statCardData, handleDeposit, handleYieldUpdate, getCurrentYieldPercentage, handleUpdateAuthority, getPendingWithdrawAmount, handleInitiateWithdraw, handleWithdraw, getWithdrawIntiationTime, getWithdrawExecutionWindow, getWithdrawTimeLock,handleWithdrawTimeUpdate };
+    // Function to update allowList
+    // @XtronSolutions you can call this function directly in the function that invoked the whitelist update on-chain
+    const updateAllowList = async (newAddresses: string[]) => {
+        try {
+            const response = await fetch('/api/update-allowlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ addresses: newAddresses })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update allowlist');
+            }
+
+            const data = await response.json();
+            setAllowList(data.updatedAddresses); // Assuming the response includes the updated list
+            toast("Allowlist updated successfully");
+        } catch (error) {
+            console.error("Failed to update allowlist:", error);
+            toast("Failed to update allowlist");
+        }
+    };
+
+    return { tokenManager, poolManager, refetch, loading, createTestQuoteMint, handleSystemSetup, handleToggleActive, statCardData, handleDeposit, handleYieldUpdate, getCurrentYieldPercentage, handleUpdateAuthority, getPendingWithdrawAmount, handleInitiateWithdraw, handleWithdraw, getWithdrawIntiationTime, getWithdrawExecutionWindow, getWithdrawTimeLock, handleWithdrawTimeUpdate, allowList };
 };

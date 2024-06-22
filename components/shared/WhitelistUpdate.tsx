@@ -1,8 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSold } from '../../hooks/useSold';
 
 const UpdateModal = ({ open, setOpen }: any) => {
+  const { allowList } = useSold();
+  
+  const [textareaValue, setTextareaValue] = useState(JSON.stringify(allowList, null, 2));
+
+  useEffect(() => {
+    setTextareaValue(JSON.stringify(allowList, null, 2)); // Update textarea when allowList changes
+  }, [allowList]);
+
   const modalRef = React.useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: React.MouseEvent) => {
@@ -25,7 +34,7 @@ const UpdateModal = ({ open, setOpen }: any) => {
             </button>
           </div>
           <div className="w-full flex flex-col items-center justify-center gap-4 mt-4">
-            <textarea className="textarea textarea-bordered w-full bg-transparent" placeholder="
+            <textarea value={textareaValue} className="textarea textarea-bordered w-full bg-transparent" placeholder="
             Paste the updated .json to whitelist here...
             "></textarea>
             <div className="w-full flex items-center justify-between gap-4 mt-4">
