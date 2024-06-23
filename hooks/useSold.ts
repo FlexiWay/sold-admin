@@ -62,12 +62,12 @@ export const useSold = () => {
             setPoolManager(poolManagerAcc);
 
             // Stat stat cards
-            tokenManagerAcc && (
+            tokenManagerAcc && poolManagerAcc && (
                 setStatCardData({
                     totalSupply: bigIntToFloat(tokenManagerAcc.totalSupply, tokenManagerAcc.mintDecimals),
                     usdcInPool: bigIntToFloat(tokenManagerAcc.totalCollateral, tokenManagerAcc.quoteMintDecimals),
-                    totalStaked: 0,
-                    xSoldSupply: 0
+                    totalStaked: bigIntToFloat(poolManagerAcc.baseBalance, poolManagerAcc.baseMintDecimals),
+                    xSoldSupply: bigIntToFloat(poolManagerAcc.xSupply, poolManagerAcc.xMintDecimals)
                 })
             )
 
