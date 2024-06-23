@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useSold } from '../../hooks/useSold';
+import { Spin } from 'antd';
 
 export function YieldUpdate() {
   const sold = useSold();
@@ -39,12 +40,15 @@ export function YieldUpdate() {
             step="1"
             value={inputValue}
             onChange={handleInputChange}
+            onFocus={(e) => e.target.value === '0' && (e.target.value = '')}
           />
-          <span className='text-xs opacity-50'>{yieldValue}%</span>
+          {/* <span className='text-xs opacity-50'>{yieldValue}%</span> */}
         </div>
         <div className="w-full flex items-center justify-center gap-4 mt-4">
           <button className='secondaryCTA' onClick={updateYield} disabled={isNaN(parseInt(inputValue, 10)) || parseInt(inputValue, 10) < 0 || parseInt(inputValue, 10) > 100}>
-            {inputValue ? `Update to ${inputValue}%` : `Update Yield`}
+            {sold.loading ? <Spin size="small" className="" /> : <>
+              {inputValue ? `Update to ${inputValue}%` : `Update Yield`}
+            </>}
           </button>
         </div>
       </div>

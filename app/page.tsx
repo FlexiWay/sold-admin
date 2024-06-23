@@ -7,16 +7,11 @@ import ThirdRow from '../components/shared/ThirdRow';
 import { useSold } from '../hooks/useSold';
 import Setup from '../components/shared/Setup';
 
-const admins = [
-  "9JpUDuhoordi6Cs1adEamepYu8zqt8fgYbpHHHoCDZ6r"
-]
-
 const Index: React.FC = () => {
 
   const wallet = useWallet();
   const sold = useSold();
-
-  console.log(sold);
+  const { loading } = sold;
 
   // TODO: Wallet Check
   if (!wallet.connected) {
@@ -25,11 +20,6 @@ const Index: React.FC = () => {
     </div>
   }
 
-  // if (!admins.includes(wallet.publicKey?.toBase58() || "")) {
-  //   return <div className='flex items-center justify-center '>
-  //     <h1>Unauthorized Access</h1>
-  //   </div>
-  // }
 
   if (sold.loading) {
     return <div className='flex items-center justify-center '>
@@ -51,11 +41,11 @@ const Index: React.FC = () => {
 
       >
         <div className="w-full flex flex-col items-center justify-center gap-4">
-          <h1>Admin Dashboard</h1>
-          <p className='opacity-50 text-center max-w-2xl'>
+          <h1 className='underline'>Admin Dashboard</h1>
+          {/* <p className='opacity-50 text-center max-w-2xl'>
             Join us in redefining the Solana-based stablecoin space, with our unparalleled 20% yield Solana Dollar.
             Cast your vote and become an early supporter of Solana Dollar.
-          </p>
+          </p> */}
         </div>
 
         <div className="w-full flex flex-col items-center justify-center gap-6">

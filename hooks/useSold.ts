@@ -15,6 +15,11 @@ const bigIntToFloat = (bigIntValue: bigint, decimals: number): number => {
     return Number(bigIntValue) / Math.pow(10, decimals);
 };
 
+const bigIntWithDecimal = (amount: number, decimal: number) => {
+    return (BigInt(amount) * BigInt(10 ** decimal));
+    // return BigInt(Math.floor(amount * (10 ** decimal))) * BigInt(10 ** decimal);
+}
+
 export const useSold = () => {
     const [loading, setLoading] = useState(false);
 
@@ -82,20 +87,31 @@ export const useSold = () => {
     useEffect(() => {
         const fetchAllowList = async () => {
             try {
-                const response = await fetch('/api/get-allowlist'); // Adjust the endpoint as needed
+                const response = await fetch('/api/get-allowlist');
                 if (!response.ok) {
+                    // Log more details about the response
+                    console.error(`Error fetching allowlist: ${response.status} ${response.statusText}`);
                     throw new Error('Failed to fetch allowlist');
                 }
                 const data = await response.json();
+                toast.success("Allowlist fetched successfully");
                 setAllowList(data.addresses);
             } catch (error) {
-                console.error("Failed to fetch allowlist:", error);
-                toast("Failed to fetch allowlist");
+                if (error instanceof Error) {
+                    // Log the error stack trace for more information
+                    console.error("Failed to fetch allowlist:", error.message);
+                    toast.error("Failed to fetch allowlist");
+                } else {
+                    // Handle other types of errors (just in case)
+                    console.error("An unexpected error occurred:", error);
+                    toast.error("An unexpected error occurred");
+                }
             }
         };
 
         fetchAllowList();
     }, [reset]);
+
 
     const refetch = () => {
         setReset(prev => prev + 1);
@@ -123,34 +139,45 @@ export const useSold = () => {
         } else {
             return 0;
         }
-
     }
 
     const createTestQuoteMint = async (setupOptions: SetupOptions) => {
+        setLoading(true);
         try {
             const { mint, txBuilder } = await createTestQuote(umi, setupOptions.baseMintDecimals);
             const resCreateQuote = await txBuilder.sendAndConfirm(umi);
+            setLoading(false);
+
+            toast.success('Test quote mint created successfully');
             return { mint, resCreateQuote };
         } catch (error) {
             console.error("Failed to create test quote mint:", error);
+            setLoading(false);
+
+            toast.error("Failed to create test quote mint");
             throw error;
         }
     }
 
     const handleSystemSetup = async (setupOptions: SetupOptions) => {
+        setLoading(true);
         try {
             const txBuilderSetup = await setup(umi, setupOptions);
             const resSetup = await txBuilderSetup.sendAndConfirm(umi, { confirm: { commitment: "finalized" } });
             console.log(resSetup);
+
+            toast.success('System setup successful');
             refetch()
         } catch (error) {
             console.error("Failed to handle system setup:", error);
-            toast("Failed to handle system setup")
+            toast.error("Failed to handle system setup")
             refetch()
         }
+        setLoading(false);
     }
 
     const handleToggleActive = async () => {
+        setLoading(true);
         try {
             let txBuilder = new TransactionBuilder()
 
@@ -164,21 +191,18 @@ export const useSold = () => {
             const resToggleActive = await txBuilder.sendAndConfirm(umi, { confirm: { commitment: "confirmed" } });
             console.log(bs58.encode(resToggleActive.signature));
 
-            toast(`${tokenManager?.active ? "Paused" : "Unpaused"}`)
+            toast.success(`${tokenManager?.active ? "Paused" : "Unpaused"}`)
             refetch();
         } catch (error) {
             console.error("Failed to handle toggle active:", error);
-            toast("Failed to handle toggle active")
+            toast.error("Failed to handle toggle active")
             refetch();
         }
-    }
-
-    const bigIntWithDecimal = (amount: number, decimal: number) => {
-        return (BigInt(amount) * BigInt(10 ** decimal));
-        // return BigInt(Math.floor(amount * (10 ** decimal))) * BigInt(10 ** decimal);
+        setLoading(false);
     }
 
     const handleDeposit = async (depositAmount: number) => {
+        setLoading(true);
         try {
             if (!tokenManager) {
                 throw new Error("Token Manager is not set");
@@ -214,6 +238,8 @@ export const useSold = () => {
             const resDeposit = await txBuilder.sendAndConfirm(umi, { confirm: { commitment: "confirmed" } });
             console.log("Transaction signature:", bs58.encode(resDeposit.signature));
             console.log("Refetching state after successful deposit");
+
+            toast.success('Deposit successful');
             refetch();
         } catch (error: any) {
             console.error("Failed to handle deposit:", error);
@@ -221,15 +247,17 @@ export const useSold = () => {
             // Specific error handling based on the error type
             if (error.message.includes("custom program error: 0x1775")) {
                 console.error("Custom program error 0x1775 occurred.");
-                toast("Custom program error 0x1775 occurred during deposit which means excessive deposit");
+                toast.error("Custom program error 0x1775 occurred during deposit which means excessive deposit");
             } else {
-                toast("Failed to handle deposit");
+                toast.error("Failed to handle deposit");
             }
             refetch();
         }
+        setLoading(false);
     };
 
     const handleInitiateWithdraw = async (withdrawAmount: number) => {
+        setLoading(true);
         try {
             if (!tokenManager) {
                 throw new Error("Token Manager is not set");
@@ -264,16 +292,18 @@ export const useSold = () => {
             const resInitializeUpdate = await txBuilder.sendAndConfirm(umi, { confirm: { commitment: "confirmed" } });
             console.log(bs58.encode(resInitializeUpdate.signature));
 
-            toast('Initialization successful');
+            toast.success('Initialization successful');
             refetch();
         } catch (e) {
             console.error("Failed to handle Initialization withdraw:", e);
-            toast("Failed to handle Initialization withdraw");
+            toast.error("Failed to handle Initialization withdraw");
             refetch();
         }
+        setLoading(false);
     }
 
     const handleWithdraw = async (withdrawAmount: number) => {
+        setLoading(true);
         try {
             if (!tokenManager) {
                 throw new Error("Token Manager is not set");
@@ -300,17 +330,19 @@ export const useSold = () => {
             const resWithdrawUpdate = await txBuilder.sendAndConfirm(umi, { confirm: { commitment: "confirmed" } });
             console.log(bs58.encode(resWithdrawUpdate.signature));
 
-            toast('Withdraw successful');
+            toast.success('Withdraw successful');
             refetch();
         } catch (e) {
             console.error("Failed to handle withdraw:", e);
-            toast("Failed to handle withdraw");
+            toast.error("Failed to handle withdraw");
             refetch();
         }
+        setLoading(false);
     }
 
     const handleYieldUpdate = async (yieldPercentage: any) => {
         console.log("Yield percentage: ", yieldPercentage);
+        setLoading(true);
         try {
             if (!tokenManager || !poolManager) {
                 throw new Error("Token Manager or Pool Manager is not set");
@@ -343,16 +375,18 @@ export const useSold = () => {
             const resYieldUpdate = await txBuilder.sendAndConfirm(umi, { confirm: { commitment: "confirmed" }, send: { skipPreflight: true } });
             console.log('Yield update confirmed:', resYieldUpdate.signature);
 
-            toast('Yield update successful');
+            toast.success('Yield update successful');
             refetch();
         } catch (e) {
             console.error("Failed to handle yield update:", e);
-            toast("Failed to handle yield update");
+            toast.error("Failed to handle yield update");
             refetch();
         }
+        setLoading(false);
     };
 
     const handleUpdateAuthority = async (newAllowedWallets: any) => {
+        setLoading(true);
         try {
             if (!tokenManager) {
                 throw new Error("Token Manager is not set");
@@ -381,16 +415,18 @@ export const useSold = () => {
 
             //console.log('admin update confirmed:', resAdminUpdate.signature);
 
-            toast('Admin updated successful');
+            toast.success('Admin updated successful');
             refetch();
         } catch (e) {
             console.error("Failed to handle admin update:", e);
-            toast("Failed to handle admin update");
+            toast.error("Failed to handle admin update");
             refetch();
         }
+        setLoading(false);
     }
 
     const handleWithdrawTimeUpdate = async (LockTimeSecs: number | null, excutionTimeSecs: number | null) => {
+        setLoading(true);
         try {
             let txBuilder = new TransactionBuilder()
 
@@ -410,17 +446,20 @@ export const useSold = () => {
             const resTime = await txBuilder.sendAndConfirm(umi, { confirm: { commitment: "confirmed" } });
             console.log(bs58.encode(resTime.signature));
 
+            toast.success('Time updated successful');
             refetch();
         } catch (error) {
             console.error("Failed to handle time update:", error);
-            toast("Failed to handle time update")
+            toast.error("Failed to handle time update")
             refetch();
         }
+        setLoading(false);
     }
 
     // Function to update allowList
     // @XtronSolutions you can call this function directly in the function that invoked the whitelist update on-chain
     const updateAllowList = async (newAddresses: string[]) => {
+        setLoading(true);
         try {
             const response = await fetch('/api/update-allowlist', {
                 method: 'POST',
@@ -436,11 +475,14 @@ export const useSold = () => {
 
             const data = await response.json();
             setAllowList(data.updatedAddresses); // Assuming the response includes the updated list
-            toast("Allowlist updated successfully");
+            toast.success("Allowlist updated successfully");
+            refetch();
         } catch (error) {
             console.error("Failed to update allowlist:", error);
-            toast("Failed to update allowlist");
+            toast.error("Failed to update allowlist");
+            refetch()
         }
+        setLoading(false);
     };
 
     return { tokenManager, poolManager, refetch, loading, createTestQuoteMint, handleSystemSetup, handleToggleActive, statCardData, handleDeposit, handleYieldUpdate, getCurrentYieldPercentage, handleUpdateAuthority, getPendingWithdrawAmount, handleInitiateWithdraw, handleWithdraw, getWithdrawIntiationTime, getWithdrawExecutionWindow, getWithdrawTimeLock, handleWithdrawTimeUpdate, allowList };

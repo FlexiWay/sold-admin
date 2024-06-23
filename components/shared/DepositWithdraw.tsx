@@ -13,7 +13,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
   useEffect(() => {
     checkTimeWindow();
     //const interval = setInterval(checkTimeWindow, 1000);
-   // return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, [sold]);
 
   const handleInputChange = (event: { target: { value: string } }) => {
@@ -68,13 +68,23 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
           className="input input-bordered w-full bg-transparent"
           value={inputValue}
           onChange={handleInputChange}
+          onFocus={(e) => e.target.value === '0' && (e.target.value = '')}
         />
         <div className="w-full flex items-center justify-between gap-4 mt-4">
-          <button className="mainCTA" onClick={() => sold.handleDeposit(inputValue)}>Deposit</button>
+          <button
+            className="mainCTA"
+            onClick={() => sold.handleDeposit(inputValue)}
+            disabled={inputValue <= 0}
+          >
+            Deposit
+          </button>
           {((sold.tokenManager?.pendingWithdrawalAmount || 0 > 0) && !withdrawExpired) ? (
             !isExecuteWindow ? (
               <div className="flex items-center justify-center gap-1 flex-col">
-                <button className="secondaryCTA" disabled={true} onClick={() => sold.handleWithdraw(inputValue)}>Withdraw</button>
+                <button
+                  className="secondaryCTA"
+                  disabled={true}
+                  onClick={() => sold.handleWithdraw(inputValue)}>Withdraw</button>
                 <CountdownTimer
                   timerMsg={"opens in"}
                   onFinish={checkTimeWindow}
@@ -84,7 +94,13 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
               </div>
             ) : (
               <div className="flex items-center justify-center gap-1 flex-col">
-                <button className="secondaryCTA" onClick={() => sold.handleWithdraw(inputValue)}>Withdraw</button>
+                <button
+                  className="secondaryCTA"
+                  onClick={() => sold.handleWithdraw(inputValue)}
+                  disabled={withdrawExpired || inputValue <= 0}
+                >
+                  Withdraw
+                </button>
                 <CountdownTimer
                   timerMsg={"closes in"}
                   onFinish={checkTimeWindow}
@@ -95,7 +111,13 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
             )
           ) : (
             <div className="flex items-center justify-center gap-1 flex-col">
-              <button className="secondaryCTA" onClick={() => sold.handleInitiateWithdraw(inputValue)}>Initialize Withdraw</button>
+              <button
+                className="secondaryCTA"
+                onClick={() => sold.handleInitiateWithdraw(inputValue)}
+                disabled={withdrawExpired || inputValue <= 0}
+              >
+                Init Withdraw
+              </button>
               {withdrawExpired && <span>Withdraw Expired!!</span>}
             </div>
           )}
