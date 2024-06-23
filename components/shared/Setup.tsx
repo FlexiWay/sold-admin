@@ -8,7 +8,7 @@ const Setup: React.FC = () => {
     const [setupOptions, setSetupOptions] = useState<SetupOptions>({
         baseMintName: "SOLD",
         baseMintSymbol: "SOLD",
-        baseMintUri: "https://builderz.dev/_next/image?url=%2Fimages%2Fheader-gif.gif&w=3840&q=75",
+        baseMintUri: "https://shdw-drive.genesysgo.net/4d35gSa4Z8WHF265V196rhdgdZ6jFzpLULmeczQUjG5t/pusd_metadata.json",
         baseMintDecimals: 6,
         xMintDecimals: 6,
         quoteMint: "",

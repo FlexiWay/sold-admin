@@ -190,10 +190,10 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
-"@builderz/sold@^0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@builderz/sold/-/sold-0.1.7.tgz#8a19471bb49e4bf1513e07f9d01d041ddced6a7a"
-  integrity sha512-zNdG9t87iRvBxxURt/hG2OEvyEadXiakkKRRBxo1z2b4LhhdSDQDNXDpVeMmYdgVG5aBYPm7mpdwZLFYyAdn2A==
+"@builderz/sold@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@builderz/sold/-/sold-0.1.8.tgz#662fbe86a6027f3b028719f74e540de394bd5b0b"
+  integrity sha512-nPvEeitF7vgvGmCaxGPY5nwVO+XWo2B8tw3fYdIBgh81lemA4fA2vDb/7yehCz2iaMHf5u5wD0h7g3z1VZPYfQ==
   dependencies:
     "@metaplex-foundation/mpl-token-metadata" "^3.1.2"
     "@metaplex-foundation/mpl-toolbox" "^0.9.1"

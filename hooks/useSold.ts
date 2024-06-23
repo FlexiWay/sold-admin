@@ -20,6 +20,8 @@ export const useSold = () => {
 
     const [tokenManager, setTokenManager] = useState<TokenManager | null>(null);
     const [poolManager, setPoolManager] = useState<PoolManager | null>(null);
+    console.log(Number(poolManager?.annualYieldRate));
+
     const [allowList, setAllowList] = useState<string[]>([]);
 
     const [reset, setReset] = useState(0);
@@ -117,11 +119,7 @@ export const useSold = () => {
 
     const getCurrentYieldPercentage = () => {
         if (poolManager) {
-            const currentRate = BigInt(poolManager.annualYieldRate);
-
-            const totalSupply = BigInt(tokenManager!.totalSupply);
-            const currentPercentage = (currentRate * BigInt(100)) / totalSupply;
-            return currentPercentage;
+            return poolManager.annualYieldRate / BigInt(100);
         } else {
             return 0;
         }
@@ -312,36 +310,37 @@ export const useSold = () => {
     }
 
     const handleYieldUpdate = async (yieldPercentage: any) => {
+        console.log("Yield percentage: ", yieldPercentage);
         try {
-
-            if (!tokenManager) {
-                throw new Error("Token Manager is not set");
+            if (!tokenManager || !poolManager) {
+                throw new Error("Token Manager or Pool Manager is not set");
             }
 
             let txBuilder = new TransactionBuilder();
 
-            const totalSupply = BigInt(tokenManager!.totalSupply);
-            const annualYieldRate = (totalSupply * BigInt(yieldPercentage)) / BigInt(100);
+            const yieldBasisPoints = yieldPercentage * 100;
 
-            console.log("Yield amount in BIGINT: " + annualYieldRate);
-            console.log("Yield amount in float: " + bigIntToFloat(annualYieldRate, tokenManager.mintDecimals));
+            // const totalSupply = BigInt(tokenManager!.totalSupply);
+            // const annualYieldRate = (totalSupply * BigInt(yieldPercentage)) / BigInt(100);
+            // console.log("Yield amount in BIGINT: " + annualYieldRate);
+            // console.log("Yield amount in float: " + bigIntToFloat(annualYieldRate, tokenManager.mintDecimals));
 
-            let vaultPubKey = findAssociatedTokenPda(umi, { owner: poolManagerPubKey[0], mint: poolManager!.baseMint });
+            let vaultPubKey = findAssociatedTokenPda(umi, { owner: poolManagerPubKey[0], mint: poolManager.baseMint });
 
             txBuilder = txBuilder.add(updateAnnualYield(umi, {
                 poolManager: poolManagerPubKey[0],
                 admin: umi.identity,
-                annualYieldRate,
+                annualYieldRate: yieldBasisPoints,
                 tokenManager: tokenManagerPubKey,
                 soldIssuanceProgram: SOLD_ISSUANCE_PROGRAM_ID,
                 associatedTokenProgram: SPL_ASSOCIATED_TOKEN_PROGRAM_ID,
-                baseMint: poolManager!.baseMint,
+                baseMint: poolManager.baseMint,
                 vault: vaultPubKey
             }));
 
             console.log(txBuilder);
 
-            const resYieldUpdate = await txBuilder.sendAndConfirm(umi, { confirm: { commitment: "confirmed" } });
+            const resYieldUpdate = await txBuilder.sendAndConfirm(umi, { confirm: { commitment: "confirmed" }, send: { skipPreflight: true } });
             console.log('Yield update confirmed:', resYieldUpdate.signature);
 
             toast('Yield update successful');
