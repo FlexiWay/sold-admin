@@ -67,7 +67,7 @@ const AdminUpdateModal = ({ open, setOpen }: any) => {
             type="text"
             className="input input-bordered w-full bg-transparent"
             value={inputValue}
-            placeholder="9sd8...jcx9"
+            placeholder="Enter new admin..."
             onChange={handleInputChange}
           />
           {error && <span className="text-red-500">{error}</span>}

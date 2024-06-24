@@ -2,17 +2,63 @@
 
 import React, { useEffect, useState } from "react";
 import { useSold } from "../../hooks/useSold";
+import { PublicKey } from "@solana/web3.js";
+import { Spin } from "antd";
+
 
 const UpdateModal = ({ open, setOpen }: any) => {
-  const { allowList } = useSold();
+  const sold = useSold();
+  const [error, setError] = useState("");
 
   const [textareaValue, setTextareaValue] = useState(
-    JSON.stringify(allowList, null, 2),
+    JSON.stringify(sold.allowList, null, 1),
   );
 
   useEffect(() => {
-    setTextareaValue(JSON.stringify(allowList, null, 2)); // Update textarea when allowList changes
-  }, [allowList]);
+    setTextareaValue(JSON.stringify(sold.allowList, null, 1)); // Update textarea when allowList changes
+  }, [sold.allowList]);
+
+  const handleTextareaChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setTextareaValue(event.target.value);
+    setError(""); // Clear error on new input
+  };
+
+  const isValidPublicKey = (key: string): boolean => {
+    try {
+      new PublicKey(key);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleUpdateClick = async () => {
+    try {
+      const parsedValue = JSON.parse(textareaValue);
+      console.log(parsedValue);
+      if (
+        Array.isArray(parsedValue) &&
+        parsedValue.every(
+          (item) =>
+            typeof item === "string" &&
+            item.length > 0 &&
+            isValidPublicKey(item),
+        )
+      ) {
+        // Valid JSON string array with valid Solana public keys
+        await sold.handleWhiteList(parsedValue);
+        setOpen(false);
+      } else {
+        throw new Error("Invalid format");
+      }
+    } catch (error) {
+      setError(
+        'Invalid input. Please enter a valid JSON string array with valid Solana public keys, e.g., ["key1", "key2"].',
+      );
+    }
+  };
 
   const modalRef = React.useRef<HTMLDivElement>(null);
 
@@ -59,10 +105,11 @@ const UpdateModal = ({ open, setOpen }: any) => {
               placeholder="
             Paste the updated .json to whitelist here...
             "
-              onChange={(e) => setTextareaValue(e.target.value)}
+              onChange={handleTextareaChange}
             ></textarea>
+            {error && <span className="text-red-500">{error}</span>}
             <div className="w-full flex items-center justify-between gap-4 mt-4">
-              <button className="secondaryCTA w-full">Update</button>
+              <button className="secondaryCTA w-full" onClick={handleUpdateClick}>Update</button>
               {/* <button className='secondaryCTA'>Reset</button> */}
             </div>
           </div>
@@ -74,16 +121,17 @@ const UpdateModal = ({ open, setOpen }: any) => {
 
 export default function WhitelistUpdate() {
   const [open, setOpen] = useState(false);
+  const sold = useSold();
 
   return (
     <>
       <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
         <div className="w-full flex items-center justify-start">
-          <span className="text-xl font-black">Gatekeepers</span>
+          <span className="text-xl font-black">WhiteList</span>
         </div>
         <div className="max-w-md mx-auto">
           <div className="w-full flex items-center justify-center gap-4 mt-4">
-            <button className="secondaryCTA" onClick={() => setOpen(true)}>
+            {sold.listFetched && <button className="secondaryCTA" onClick={() => setOpen(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -99,6 +147,8 @@ export default function WhitelistUpdate() {
                 />
               </svg>
             </button>
+            }
+            {!sold.listFetched && <Spin />}
             {/* <button className='secondaryCTA'>Withdraw</button> */}
           </div>
         </div>

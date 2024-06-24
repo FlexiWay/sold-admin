@@ -37,6 +37,7 @@ import {
   PublicKey as UmiPublicKey,
   publicKey,
 } from "@metaplex-foundation/umi-public-keys";
+import { useSoldStateContext } from "../contexts/SoldStateProvider";
 
 // TODO: Move this into npm package
 const bigIntToFloat = (bigIntValue: bigint, decimals: number): number => {
@@ -45,35 +46,23 @@ const bigIntToFloat = (bigIntValue: bigint, decimals: number): number => {
 
 const bigIntWithDecimal = (amount: number, decimal: number) => {
   return BigInt(amount) * BigInt(10 ** decimal);
-  // return BigInt(Math.floor(amount * (10 ** decimal))) * BigInt(10 ** decimal);
 };
 
+let isFetching = false;//local variable so it wont re-render
 export const useSold = () => {
   const [loading, setLoading] = useState(false);
 
-  const [tokenManager, setTokenManager] = useState<TokenManager | null>(null);
-  const [poolManager, setPoolManager] = useState<PoolManager | null>(null);
-  // console.log(Number(poolManager?.annualYieldRate));
-  const [owner, setOwner] = useState<PublicKey | null>(null);
-  const [admin, setAdmin] = useState<PublicKey | null>(null);
-  const [gateKeepers, setGateKeepers] = useState<PublicKey[]>([]);
-
-  const [allowList, setAllowList] = useState<string[]>([]);
-
-  const [reset, setReset] = useState(0);
-
-  const [statCardData, setStatCardData] = useState<{
-    totalSupply: number;
-    usdcInPool: number;
-    totalStaked: number;
-    xSoldSupply: number;
-    [key: string]: number;
-  }>({
-    totalSupply: 0,
-    usdcInPool: 0,
-    totalStaked: 0,
-    xSoldSupply: 0,
-  });
+  const {
+    tokenManager, setTokenManager,
+    poolManager, setPoolManager,
+    owner, setOwner,
+    admin, setAdmin,
+    gateKeepers, setGateKeepers,
+    allowList, setAllowList,
+    reset, setReset,
+    statCardData, setStatCardData,
+    listFetched,setListFetched,
+  } = useSoldStateContext();
 
   const wallet = useWallet();
   const { connection } = useConnection();
@@ -99,6 +88,8 @@ export const useSold = () => {
 
       setTokenManager(tokenManagerAcc);
       setPoolManager(poolManagerAcc);
+
+      console.log("Token Manager: ",tokenManagerAcc);
 
       // Stat stat cards
       tokenManagerAcc &&
@@ -131,35 +122,6 @@ export const useSold = () => {
   }, [wallet.publicKey, reset]);
 
   useEffect(() => {
-    const fetchAllowList = async () => {
-      if (allowList.length === 0) {
-        try {
-          const response = await fetch("/api/get-allowlist");
-          if (!response.ok) {
-            console.error(
-              `Error fetching allowlist: ${response.status} ${response.statusText}`,
-            );
-            throw new Error("Failed to fetch allowlist");
-          }
-          const data = await response.json();
-          toast.success("Allowlist fetched successfully");
-          setAllowList(data.addresses);
-        } catch (error) {
-          if (error instanceof Error) {
-            console.error("Failed to fetch allowlist:", error.message);
-            toast.error("Failed to fetch allowlist");
-          } else {
-            console.error("An unexpected error occurred:", error);
-            toast.error("An unexpected error occurred");
-          }
-        }
-      }
-    };
-
-    fetchAllowList();
-  }, [allowList]);
-
-  useEffect(() => {
     const fetchState = async () => {
       setLoading(true);
 
@@ -176,7 +138,6 @@ export const useSold = () => {
           tokenManagerAcc.gateKeepers.map((key) => new PublicKey(key)),
         );
       }
-
       setLoading(false);
     };
 
@@ -184,6 +145,39 @@ export const useSold = () => {
       fetchState();
     }
   }, [wallet.publicKey]);
+
+  useEffect(() => {
+    const fetchAllowList = async () => {
+      if (!isFetching && allowList.length == 0 && !listFetched) {
+        try {
+          isFetching = true;
+          console.log("fetching allow list..........");
+          const response = await fetch("/api/get-allowlist");
+          if (!response.ok) {
+            console.error(`Error fetching allowlist: ${response.status} ${response.statusText}`);
+            throw new Error("Failed to fetch allowlist");
+          }
+          const data = await response.json();
+          toast.success("Allowlist fetched successfully");
+          setAllowList(data.addresses);
+          setListFetched(true);
+        } catch (error) {
+          if (error instanceof Error) {
+            console.error("Failed to fetch allowlist:", error.message);
+            toast.error("Failed to fetch allowlist");
+          } else {
+            console.error("An unexpected error occurred:", error);
+            toast.error("An unexpected error occurred");
+          }
+          setListFetched(false);
+        } finally {
+          isFetching = false;
+        }
+      }
+    };
+
+    fetchAllowList();
+  }, [allowList]);
 
   const refetch = () => {
     setReset((prev) => prev + 1);
@@ -298,9 +292,9 @@ export const useSold = () => {
           ((tokenManager.totalSupply /
             BigInt(10 ** tokenManager.mintDecimals)) *
             BigInt(tokenManager.exchangeRate)) /
-            BigInt(10 ** tokenManager.quoteMintDecimals) -
-            tokenManager.totalCollateral /
-              BigInt(10 ** tokenManager.quoteMintDecimals),
+          BigInt(10 ** tokenManager.quoteMintDecimals) -
+          tokenManager.totalCollateral /
+          BigInt(10 ** tokenManager.quoteMintDecimals),
         ) *
         10 ** tokenManager.quoteMintDecimals;
 
@@ -320,7 +314,7 @@ export const useSold = () => {
         "TotalCollateral: ",
         Number(
           tokenManager.totalCollateral /
-            BigInt(10 ** tokenManager.quoteMintDecimals),
+          BigInt(10 ** tokenManager.quoteMintDecimals),
         ),
       );
       console.log("Amount entered to deposit:", amountToDeposit);
@@ -545,7 +539,6 @@ export const useSold = () => {
         updateTokenManagerOwner(umi, {
           tokenManager: tokenManagerPubKey,
           owner: umi.identity,
-
           newOwner: none(),
           newAdmin: some(newAdminPubKeyInstance),
           newMinter: none(),
@@ -607,6 +600,49 @@ export const useSold = () => {
       const errorMessage =
         e instanceof Error ? e.message : "An unknown error occurred";
       toast.error("Failed to handle owner update: " + errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleWhiteList = async (newWhiteListPublicKeys: string[]) => {
+    setLoading(true);
+    try {
+      if (!tokenManager) {
+        throw new Error("Token Manager is not set");
+      }
+      // Ensure all whitelist are valid public keys
+      const newWhiteListPubKeys = newWhiteListPublicKeys.map((key) =>
+        publicKey(key),
+      );
+
+      let transactionBuilder = new TransactionBuilder();
+
+      const newMerkleRoot = getMerkleRoot(newWhiteListPubKeys);
+      transactionBuilder = transactionBuilder.add(
+        updateTokenManagerAdmin(umi, {
+          tokenManager: tokenManagerPubKey,
+          admin: umi.identity,
+          newMerkleRoot: newMerkleRoot,
+          newGateKeepers: none(),
+          newMintLimitPerSlot: none(),
+          newRedemptionLimitPerSlot: none(),
+        }),
+      );
+
+      const resWhiteListUpdate = await transactionBuilder.sendAndConfirm(umi);
+      console.log(bs58.encode(resWhiteListUpdate.signature));
+
+      toast.success("Whitelist updated successfully");
+      const allowListArray = newWhiteListPubKeys.map((key) => key.toString());
+      setAllowList(allowListArray);
+      updateAllowList(allowListArray);
+      refetch();
+    } catch (e) {
+      console.error("Failed to handle whitelist update:", e);
+      const errorMessage =
+        e instanceof Error ? e.message : "An unknown error occurred";
+      toast.error("Failed to handle whitelist update: " + errorMessage);
     } finally {
       setLoading(false);
     }
@@ -709,13 +745,14 @@ export const useSold = () => {
       }
 
       const data = await response.json();
-      setAllowList(data.updatedAddresses); // Assuming the response includes the updated list
+      console.log(data);
+      //setAllowList(data.updatedAddresses[0].addresses); // Assuming the response includes the updated list
       toast.success("Allowlist updated successfully");
-      refetch();
+      //refetch();
     } catch (error) {
       console.error("Failed to update allowlist:", error);
       toast.error("Failed to update allowlist");
-      refetch();
+      //refetch();
     }
     setLoading(false);
   };
@@ -747,5 +784,8 @@ export const useSold = () => {
     owner,
     gateKeepers,
     handleUpdateGatekeeper,
+    handleWhiteList,
+    listFetched,
+    setListFetched
   };
 };

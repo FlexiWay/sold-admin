@@ -3,6 +3,7 @@ import React from "react";
 // TODO: Change to other toast provider
 import ContextProvider from "../contexts/ContextProvider";
 import { ThemeProvider } from "../contexts/ThemeProvider";
+import { SoldStateProvider } from "../contexts/SoldStateProvider";
 
 // Providers
 
@@ -17,9 +18,11 @@ type LayoutWrapperProps = {
 
 const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
   return (
+    <SoldStateProvider>
     <ContextProvider>
       <ThemeProvider>{children}</ThemeProvider>
     </ContextProvider>
+    </SoldStateProvider>
   );
 };
 

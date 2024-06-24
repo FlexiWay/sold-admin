@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { useSold } from "../../hooks/useSold";
 import { toast } from "sonner";
 import { PublicKey } from "@solana/web3.js";
@@ -8,8 +8,12 @@ import { PublicKey } from "@solana/web3.js";
 const GateKeeperModal = ({ open, setOpen }: any) => {
   const sold = useSold();
   const modalRef = useRef<HTMLDivElement>(null);
-  const [textareaValue, setTextareaValue] = useState("[]");
+  const [textareaValue, setTextareaValue] = useState(JSON.stringify(sold.gateKeepers, null, 1),);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setTextareaValue(JSON.stringify(sold.gateKeepers, null, 1)); // Update textarea when gateKeepers changes
+  }, [sold.gateKeepers]);
 
   const handleClickOutside = (event: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -118,12 +122,12 @@ export default function GateKeeperUpdate() {
         <div className="max-w-md mx-auto">
           <div className="w-full flex items-center justify-center gap-4 mt-4">
             <div className="w-full flex flex-col items-start justify-between gap-2 h-4 bg-gray-500 bg-opacity-50 overflow-y-scroll">
-              {sold.gateKeepers.length > 0 &&
+              {/* {sold.gateKeepers.length > 0 &&
                 sold.gateKeepers.map((keeper, index) => (
                   <span key={index} className="text-xs text-white truncate">
                     {keeper.toBase58()}
                   </span>
-                ))}
+                ))} */}
             </div>
             <button className="secondaryCTA" onClick={() => setOpen(true)}>
               <svg
