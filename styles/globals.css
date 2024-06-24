@@ -1,6 +1,116 @@
 /* Importing Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-SemiBoldItalic.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-SemiBoldItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-Bold.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-Light.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-RegularItalic.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-RegularItalic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-SemiBold.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-MediumItalic.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-Medium.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-Regular.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-LightItalic.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-HeavyItalic.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-HeavyItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-Heavy.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-Heavy.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roobert TRIAL';
+    src: url('/fonts/RoobertTRIAL-BoldItalic.woff2') format('woff2'),
+        url('/fonts/RoobertTRIAL-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+
 /* Include Tailwind CSS */
 @tailwind base;
 @tailwind components;
@@ -53,8 +163,8 @@ select {
 
 /* Body styles */
 body {
-  @apply bg-texture-bg bg-center bg-cover bg-no-repeat text-white selection:bg-builderz-blue selection:text-white;
-  font-family: "Inter", sans-serif;
+  @apply bg-[#0F1114] bg-center bg-cover bg-no-repeat text-white selection:bg-builderz-blue selection:text-white;
+ font-family: 'Roobert TRIAL', sans-serif;
   /* margin: 0; */
   height: calc(100vh);
   /* Fluid Fonts */
