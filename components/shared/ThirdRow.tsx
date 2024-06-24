@@ -1,7 +1,6 @@
 import React from 'react'
 import WhitelistUpdate from './WhitelistUpdate'
-import AuthorityUpdate from './AuthorityUpdate'
-import GateKeeperUpdate from './AuthorityUpdate'
+import GateKeeperUpdate from './GateKeeperUpdate'
 import AdminUpdate from './AdminUpdate'
 import OwnerUpdate from './OwnerUpdate'
 

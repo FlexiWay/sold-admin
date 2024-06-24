@@ -2,7 +2,7 @@ import { safeFetchPoolManager, safeFetchTokenManager, findPoolManagerPda, findTo
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { createSplAssociatedTokenProgram, createSplTokenProgram, SPL_ASSOCIATED_TOKEN_PROGRAM_ID } from "@metaplex-foundation/mpl-toolbox"
 import { toast } from "sonner";
 import { TransactionBuilder, Umi, some, none } from "@metaplex-foundation/umi"
@@ -10,8 +10,7 @@ import { findAssociatedTokenPda } from "@metaplex-foundation/mpl-toolbox"
 // @ts-ignore
 import bs58 from "bs58";
 import { PublicKey } from '@solana/web3.js';
-import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
-import {publicKey} from '@metaplex-foundation/umi';
+import { PublicKey as UmiPublicKey, publicKey } from '@metaplex-foundation/umi-public-keys';
 
 // TODO: Move this into npm package
 const bigIntToFloat = (bigIntValue: bigint, decimals: number): number => {
@@ -31,6 +30,7 @@ export const useSold = () => {
     // console.log(Number(poolManager?.annualYieldRate));
     const [owner, setOwner] = useState<PublicKey | null>(null);
     const [admin, setAdmin] = useState<PublicKey | null>(null);
+    const [gateKeepers, setGateKeepers] = useState<PublicKey[]>([]);
 
     const [allowList, setAllowList] = useState<string[]>([]);
 
@@ -127,6 +127,7 @@ export const useSold = () => {
       if (tokenManagerAcc) {
         setOwner(new PublicKey(tokenManagerAcc.owner));
         setAdmin(new PublicKey(tokenManagerAcc.admin));
+        setGateKeepers(tokenManagerAcc.gateKeepers.map((key) => new PublicKey(key)));
       }
 
       setLoading(false);
@@ -486,6 +487,42 @@ export const useSold = () => {
         setLoading(false);
     }
     }
+    
+    const handleUpdateGatekeeper = async (newGatekeeperPublicKeys: string[]) => {
+    setLoading(true);
+    try {
+        if (!tokenManager) {
+        throw new Error("Token Manager is not set");
+        }
+
+        // Ensure all newGatekeeperPublicKeys are valid public keys
+        const newGatekeeperPubKeys = newGatekeeperPublicKeys.map((key) => publicKey(key));
+
+        let transactionBuilder = new TransactionBuilder();
+
+        transactionBuilder = transactionBuilder.add(updateTokenManagerAdmin(umi, {
+        tokenManager: tokenManagerPubKey,
+        admin: umi.identity,
+        newMerkleRoot: none(),
+        newGateKeepers: some(newGatekeeperPubKeys),
+        newMintLimitPerSlot: none(),
+        newRedemptionLimitPerSlot: none(),
+        }));
+
+        const resGatekeeperUpdate = await transactionBuilder.sendAndConfirm(umi);
+        console.log(bs58.encode(resGatekeeperUpdate.signature));
+
+        toast.success('Gatekeepers updated successfully');
+        setGateKeepers(newGatekeeperPubKeys.map((key) => new PublicKey(key)));
+        refetch();
+    } catch (e) {
+        console.error("Failed to handle gatekeepers update:", e);
+        const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred';
+        toast.error("Failed to handle gatekeepers update: " + errorMessage);
+    } finally {
+        setLoading(false);
+    }
+    };
 
     const handleWithdrawTimeUpdate = async (LockTimeSecs: number | null, excutionTimeSecs: number | null) => {
         setLoading(true);
@@ -571,6 +608,8 @@ export const useSold = () => {
         allowList,
         handleUpdateOwner,
         admin,
-        owner
+        owner,
+        gateKeepers,
+        handleUpdateGatekeeper
      };
 };
