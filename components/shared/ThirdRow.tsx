@@ -3,6 +3,7 @@ import WhitelistUpdate from "./WhitelistUpdate";
 import GateKeeperUpdate from "./GateKeeperUpdate";
 import AdminUpdate from "./AdminUpdate";
 import OwnerUpdate from "./OwnerUpdate";
+import MetadataUpdate from './MetadataUpdate';
 
 export default function ThirdRow() {
   return (
@@ -10,13 +11,12 @@ export default function ThirdRow() {
       <div className="w-full flex items-center justify-start">
         <span className="text-xs opacity-50 uppercase">Update</span>
       </div>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4  gap-8">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5  gap-8">
         <WhitelistUpdate />
         <GateKeeperUpdate />
-        {/* admin */}
         <AdminUpdate />
-        {/* owner */}
         <OwnerUpdate />
+        <MetadataUpdate />
       </div>
     </>
   );
