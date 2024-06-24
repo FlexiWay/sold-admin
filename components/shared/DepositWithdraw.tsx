@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSold } from '../../hooks/useSold';
 import CountdownTimer from './CountDownTimer';
 import { CompassOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 export const DepositWithdraw = ({ deposit, withdraw }: any) => {
   const sold = useSold();
@@ -97,9 +98,9 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
                 <button
                   className="secondaryCTA"
                   onClick={() => sold.handleWithdraw(inputValue)}
-                  disabled={withdrawExpired || inputValue <= 0}
+                  disabled={withdrawExpired || inputValue <= 0 || sold.loading}
                 >
-                  Withdraw
+                  {sold.loading ? <Spin size='small' /> : "Withdraw"}
                 </button>
                 <CountdownTimer
                   timerMsg={"closes in"}
@@ -114,9 +115,9 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
               <button
                 className="secondaryCTA"
                 onClick={() => sold.handleInitiateWithdraw(inputValue)}
-                disabled={withdrawExpired || inputValue <= 0}
+                disabled={withdrawExpired || inputValue <= 0 || sold.loading}
               >
-                Init Withdraw
+                {sold.loading ? <Spin size='small' /> : "Init. Withdraw"}
               </button>
               {withdrawExpired && <span>Withdraw Expired!!</span>}
             </div>

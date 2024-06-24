@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSold } from '../../hooks/useSold';
+import { Spin } from 'antd';
 
 export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
     const sold = useSold();
@@ -8,7 +9,7 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
     const handleInputChange = (event: { target: { value: string } }) => {
         const value = event.target.value;
         const numValue = parseInt(value, 10);
-        if (!isNaN(numValue) && numValue > 0) {
+        if (!isNaN(numValue) && numValue >= 0) { // Change here to allow 0
             setInputValue(numValue);
         }
     };
@@ -33,11 +34,11 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
                             </span>
                             <span className='opacity-50 text-xs'>Time Lock</span>
                             <button
-                                className='mainCTA'
+                                className='secondaryCTAsm'
                                 onClick={(e) => { sold.handleWithdrawTimeUpdate(inputValue, null) }}
-                                disabled={inputValue <= 0 || sold.loading}
+                                disabled={inputValue < 0 || sold.loading}
                             >
-                                Update
+                                {sold.loading ? <Spin size='small' /> : 'Update'}
                             </button>
                         </div>
                         <div className="flex items-center justify-center gap-1 flex-col">
@@ -46,11 +47,11 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
                             </span>
                             <span className='opacity-50 text-xs'>Execution Time Lock</span>
                             <button
-                                className='secondaryCTA'
+                                className='secondaryCTAsm'
                                 onClick={(e) => { sold.handleWithdrawTimeUpdate(null, inputValue) }}
-                                disabled={inputValue <= 0 || sold.loading}
+                                disabled={inputValue < 0 || sold.loading}
                             >
-                                Update
+                                {sold.loading ? <Spin size='small' /> : 'Update'}
                             </button>
                         </div>
                     </div>

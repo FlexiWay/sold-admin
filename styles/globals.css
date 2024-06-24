@@ -72,6 +72,9 @@ body {
 .secondaryCTA {
   @apply bg-brand-secondary text-brand-secondary py-2 px-4 rounded-md bg-opacity-20 hover:bg-opacity-100 hover:text-black transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-opacity-40 disabled:hover:text-brand-secondary disabled:hover:text-opacity-40 uppercase;
 }
+.secondaryCTAsm {
+  @apply bg-brand-secondary text-brand-secondary py-0 px-3 rounded-md bg-opacity-20 hover:bg-opacity-100 hover:text-black transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-opacity-40 disabled:hover:text-brand-secondary disabled:hover:text-opacity-40 uppercase;
+}
 
 /* Heading styles */
 h1 {
