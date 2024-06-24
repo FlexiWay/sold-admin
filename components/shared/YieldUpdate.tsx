@@ -1,18 +1,19 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { useSold } from '../../hooks/useSold';
-import { Spin } from 'antd';
+import React, { useState } from "react";
+import { useSold } from "../../hooks/useSold";
+import { Spin } from "antd";
 
 export function YieldUpdate() {
   const sold = useSold();
-  const [inputValue, setInputValue] = useState(''); // Changed to string to allow empty input
+  const [inputValue, setInputValue] = useState(""); // Changed to string to allow empty input
   const [yieldValue, setYieldValue] = useState(0); // State to hold the updated yield value
 
-  function handleInputChange(event: { target: { value: string; }; }) {
+  function handleInputChange(event: { target: { value: string } }) {
     const value = event.target.value;
     const numValue = parseInt(value, 10);
-    if (!value || (numValue >= 0 && numValue <= 100)) { // Allow empty string and numbers from 0 to 100
+    if (!value || (numValue >= 0 && numValue <= 100)) {
+      // Allow empty string and numbers from 0 to 100
       setInputValue(value);
     }
   }
@@ -23,12 +24,14 @@ export function YieldUpdate() {
       setYieldValue(numValue); // Update the yieldValue with the current input value if it's a number
       sold.handleYieldUpdate(numValue);
     }
-    setInputValue(''); // Reset input value after updating yield
+    setInputValue(""); // Reset input value after updating yield
   }
 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-2 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10 bg-opacity-50 backdrop-blur-xl">
-      <span className='text-xl font-black -mt-2'>Yield : {sold.getCurrentYieldPercentage().toString()}%</span>
+      <span className="text-xl font-black -mt-2">
+        Yield : {sold.getCurrentYieldPercentage().toString()}%
+      </span>
       <div className="max-w-md mx-auto">
         <div className="w-full flex items-center justify-between gap-4">
           <input
@@ -40,18 +43,28 @@ export function YieldUpdate() {
             step="1"
             value={inputValue}
             onChange={handleInputChange}
-            onFocus={(e) => e.target.value === '0' && (e.target.value = '')}
+            onFocus={(e) => e.target.value === "0" && (e.target.value = "")}
           />
           {/* <span className='text-xs opacity-50'>{yieldValue}%</span> */}
         </div>
         <div className="w-full flex items-center justify-center gap-4 mt-4">
-          <button className='secondaryCTA' onClick={updateYield} disabled={isNaN(parseInt(inputValue, 10)) || parseInt(inputValue, 10) < 0 || parseInt(inputValue, 10) > 100}>
-            {sold.loading ? <Spin size="small" className="" /> : <>
-              {inputValue ? `Update to ${inputValue}%` : `Update Yield`}
-            </>}
+          <button
+            className="secondaryCTA"
+            onClick={updateYield}
+            disabled={
+              isNaN(parseInt(inputValue, 10)) ||
+              parseInt(inputValue, 10) < 0 ||
+              parseInt(inputValue, 10) > 100
+            }
+          >
+            {sold.loading ? (
+              <Spin size="small" className="" />
+            ) : (
+              <>{inputValue ? `Update to ${inputValue}%` : `Update Yield`}</>
+            )}
           </button>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { useSold } from '../../hooks/useSold';
-import CountdownTimer from './CountDownTimer';
-import { CompassOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
+import React, { useEffect } from "react";
+import { useSold } from "../../hooks/useSold";
+import CountdownTimer from "./CountDownTimer";
+import { CompassOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 
 export const DepositWithdraw = ({ deposit, withdraw }: any) => {
   const sold = useSold();
@@ -28,15 +28,21 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
   const checkTimeWindow = () => {
     if (!sold.tokenManager) return;
 
-    const { pendingWithdrawalAmount, withdrawExecutionWindow, withdrawTimeLock } = sold.tokenManager;
+    const {
+      pendingWithdrawalAmount,
+      withdrawExecutionWindow,
+      withdrawTimeLock,
+    } = sold.tokenManager;
     if (pendingWithdrawalAmount <= 0) return;
 
     const now = Date.now();
-    const withdrawInitiationTime = Number(sold.getWithdrawIntiationTime()) * 1000; // Convert to milliseconds
+    const withdrawInitiationTime =
+      Number(sold.getWithdrawIntiationTime()) * 1000; // Convert to milliseconds
     const elapsed = now - withdrawInitiationTime;
 
     const withdrawTimeLockDuration = Number(withdrawTimeLock) * 1000;
-    const withdrawExecutionWindowDuration = Number(withdrawExecutionWindow) * 1000;
+    const withdrawExecutionWindowDuration =
+      Number(withdrawExecutionWindow) * 1000;
 
     console.log(elapsed);
     console.log(withdrawTimeLockDuration);
@@ -46,7 +52,10 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
       console.log("running withfraw timer");
       setIsExecuteWindow(false);
       setWithdrawExpired(false);
-    } else if (elapsed < (withdrawTimeLockDuration + withdrawExecutionWindowDuration)) {
+    } else if (
+      elapsed <
+      withdrawTimeLockDuration + withdrawExecutionWindowDuration
+    ) {
       console.log("running execution timer");
       // Run withdraw execution timer
       setIsExecuteWindow(true);
@@ -69,7 +78,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
           className="input input-bordered w-full bg-transparent"
           value={inputValue}
           onChange={handleInputChange}
-          onFocus={(e) => e.target.value === '0' && (e.target.value = '')}
+          onFocus={(e) => e.target.value === "0" && (e.target.value = "")}
         />
         <div className="w-full flex items-center justify-between gap-4 mt-4">
           <button
@@ -79,13 +88,17 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
           >
             Deposit
           </button>
-          {((sold.tokenManager?.pendingWithdrawalAmount || 0 > 0) && !withdrawExpired) ? (
+          {(sold.tokenManager?.pendingWithdrawalAmount || 0 > 0) &&
+          !withdrawExpired ? (
             !isExecuteWindow ? (
               <div className="flex items-center justify-center gap-1 flex-col">
                 <button
                   className="secondaryCTA"
                   disabled={true}
-                  onClick={() => sold.handleWithdraw(inputValue)}>Withdraw</button>
+                  onClick={() => sold.handleWithdraw(inputValue)}
+                >
+                  Withdraw
+                </button>
                 <CountdownTimer
                   timerMsg={"opens in"}
                   onFinish={checkTimeWindow}
@@ -100,13 +113,16 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
                   onClick={() => sold.handleWithdraw(inputValue)}
                   disabled={withdrawExpired || inputValue <= 0 || sold.loading}
                 >
-                  {sold.loading ? <Spin size='small' /> : "Withdraw"}
+                  {sold.loading ? <Spin size="small" /> : "Withdraw"}
                 </button>
                 <CountdownTimer
                   timerMsg={"closes in"}
                   onFinish={checkTimeWindow}
                   totalTime={Number(sold.getWithdrawExecutionWindow())}
-                  targetTimestamp={Number(sold.getWithdrawIntiationTime()) + Number(sold.getWithdrawTimeLock())}
+                  targetTimestamp={
+                    Number(sold.getWithdrawIntiationTime()) +
+                    Number(sold.getWithdrawTimeLock())
+                  }
                 />
               </div>
             )
@@ -117,7 +133,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
                 onClick={() => sold.handleInitiateWithdraw(inputValue)}
                 disabled={withdrawExpired || inputValue <= 0 || sold.loading}
               >
-                {sold.loading ? <Spin size='small' /> : "Init. Withdraw"}
+                {sold.loading ? <Spin size="small" /> : "Init. Withdraw"}
               </button>
               {withdrawExpired && <span>Withdraw Expired!!</span>}
             </div>

@@ -1,48 +1,49 @@
-"use client"
+"use client";
 
-import { useWallet } from '@solana/wallet-adapter-react';
-import SecondRow from '../components/shared/SecondRow';
-import StatsCards from '../components/shared/StatsCards';
-import ThirdRow from '../components/shared/ThirdRow';
-import { useSold } from '../hooks/useSold';
-import Setup from '../components/shared/Setup';
-import { Spin } from 'antd';
+import { useWallet } from "@solana/wallet-adapter-react";
+import SecondRow from "../components/shared/SecondRow";
+import StatsCards from "../components/shared/StatsCards";
+import ThirdRow from "../components/shared/ThirdRow";
+import { useSold } from "../hooks/useSold";
+import Setup from "../components/shared/Setup";
+import { Spin } from "antd";
 
 const Index: React.FC = () => {
-
   const wallet = useWallet();
   const sold = useSold();
   const { loading } = sold;
 
   // TODO: Wallet Check
   if (!wallet.connected) {
-    return <div className='flex items-center justify-center '>
-      <h1>Please connect your wallet</h1>
-    </div>
+    return (
+      <div className="flex items-center justify-center ">
+        <h1>Please connect your wallet</h1>
+      </div>
+    );
   }
 
-
   if (sold.loading) {
-    return <div className='flex items-center justify-center '>
-      <Spin size='large' />
-    </div>
+    return (
+      <div className="flex items-center justify-center ">
+        <Spin size="large" />
+      </div>
+    );
   }
 
   if (!sold.poolManager && !sold.tokenManager) {
-    return <div className='flex flex-col space-y-4 items-center justify-center w-full container'>
-      <h1>System needs to be initialized</h1>
-      <Setup />
-    </div>
+    return (
+      <div className="flex flex-col space-y-4 items-center justify-center w-full container">
+        <h1>System needs to be initialized</h1>
+        <Setup />
+      </div>
+    );
   }
 
   return (
     <>
-      <section
-        className='w-full flex flex-grow h-full flex-col items-center justify-center gap-20'
-
-      >
+      <section className="w-full flex flex-grow h-full flex-col items-center justify-center gap-20">
         <div className="w-full flex flex-col items-center justify-center gap-4">
-          <h1 className='underline'>Admin Dashboard</h1>
+          <h1 className="underline">Admin Dashboard</h1>
           {/* <p className='opacity-50 text-center max-w-2xl'>
             Join us in redefining the Solana-based stablecoin space, with our unparalleled 20% yield Solana Dollar.
             Cast your vote and become an early supporter of Solana Dollar.
@@ -58,7 +59,7 @@ const Index: React.FC = () => {
           <ThirdRow />
           {/* yield update */}
         </div>
-      </section >
+      </section>
     </>
   );
 };

@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment } from "react";
 
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   BellIcon,
@@ -14,24 +14,25 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import MyMultiButton from '../layout/MyMultiButton'
-import { Logo } from '../Logo'
-
-
+} from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/20/solid";
+import MyMultiButton from "../layout/MyMultiButton";
+import { Logo } from "../Logo";
 
 const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
+  { name: "Your profile", href: "#" },
+  { name: "Sign out", href: "#" },
+];
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 const NewAppBar = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>
@@ -119,7 +120,7 @@ const NewAppBar = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default NewAppBar
+export default NewAppBar;

@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 interface CountdownTimerProps {
   targetTimestamp: number; // The target date as a Unix timestamp
   totalTime: number; // The total time in seconds
-  onFinish:any;
-  timerMsg:any;
+  onFinish: any;
+  timerMsg: any;
 }
 
-const CountdownTimer: React.FC<CountdownTimerProps> = ({ totalTime, targetTimestamp,onFinish,timerMsg }) => {
+const CountdownTimer: React.FC<CountdownTimerProps> = ({
+  totalTime,
+  targetTimestamp,
+  onFinish,
+  timerMsg,
+}) => {
   const calculateTimeLeft = () => {
     if (!targetTimestamp || !totalTime) return {};
 
@@ -39,7 +44,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ totalTime, targetTimest
       if (Object.keys(newTimeLeft).length === 0) {
         //setIsTimeUp(false);
         onFinish();
-       // clearTimeout(timer);
+        // clearTimeout(timer);
       }
     }, 500);
 
@@ -48,18 +53,15 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ totalTime, targetTimest
 
   const formatTime = () => {
     //return `${timeLeft.days || 0}:${timeLeft.hours || 0}:${timeLeft.minutes || 0}:${timeLeft.seconds || 0}`;
-    return timerMsg+' '+`${timeLeft.hours || 0}:${timeLeft.minutes || 0}:${timeLeft.seconds || 0}`;
-
+    return (
+      timerMsg +
+      " " +
+      `${timeLeft.hours || 0}:${timeLeft.minutes || 0}:${timeLeft.seconds || 0}`
+    );
   };
 
   return (
-    <div>
-      {isTimeUp ? (
-        <span>Times up!</span>
-      ) : (
-        <div>{formatTime()}</div>
-      )}
-    </div>
+    <div>{isTimeUp ? <span>Times up!</span> : <div>{formatTime()}</div>}</div>
   );
 };
 

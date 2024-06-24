@@ -1,6 +1,5 @@
-
 /* Importing Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 /* Include Tailwind CSS */
 @tailwind base;
@@ -54,8 +53,8 @@ select {
 
 /* Body styles */
 body {
-  @apply bg-texture-bg bg-center bg-cover bg-no-repeat text-white selection:bg-builderz-blue selection:text-white ;
-  font-family: 'Inter', sans-serif;
+  @apply bg-texture-bg bg-center bg-cover bg-no-repeat text-white selection:bg-builderz-blue selection:text-white;
+  font-family: "Inter", sans-serif;
   /* margin: 0; */
   height: calc(100vh);
   /* Fluid Fonts */
@@ -127,7 +126,6 @@ body::-webkit-scrollbar-thumb {
   @apply px-2 py-1 rounded-md hover:text-[#43b083] dark:hover:text-[#14F195] bg-opacity-20;
 }
 
-
 /* Glow Buttons */
 .glow-on-hover {
   @apply bg-transparent text-black dark:text-white hover:text-white;
@@ -155,7 +153,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .glow-on-hover:before {
-  content: '';
+  content: "";
   background: linear-gradient(
     45deg,
     #ff0000,
@@ -182,7 +180,7 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 .glow:before {
-  content: '';
+  content: "";
   background: linear-gradient(
     45deg,
     #ff0000,
@@ -233,7 +231,7 @@ body::-webkit-scrollbar-thumb {
 .glow-on-hover:after {
   @apply bg-transparent text-black dark:text-white;
   z-index: -1;
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 100%;
@@ -244,7 +242,7 @@ body::-webkit-scrollbar-thumb {
 .glow:after {
   @apply bg-transparent text-black dark:text-white;
   z-index: -1;
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 100%;
@@ -270,9 +268,19 @@ body::-webkit-scrollbar-thumb {
 }
 
 .meshBg {
-  background: #0a0924; background-image: radial-gradient(at 47.0% 96.0%, #151b40 0px, transparent 50%),radial-gradient(at 61.0% 15.0%, #09162b 0px, transparent 50%),radial-gradient(at 8.0% 16.0%, #0f1930 0px, transparent 50%),radial-gradient(at 85.0% 28.0%, #110c3d 0px, transparent 50%),radial-gradient(at 81.0% 66.0%, #060d1f 0px, transparent 50%)
+  background: #0a0924;
+  background-image: radial-gradient(at 47% 96%, #151b40 0px, transparent 50%),
+    radial-gradient(at 61% 15%, #09162b 0px, transparent 50%),
+    radial-gradient(at 8% 16%, #0f1930 0px, transparent 50%),
+    radial-gradient(at 85% 28%, #110c3d 0px, transparent 50%),
+    radial-gradient(at 81% 66%, #060d1f 0px, transparent 50%);
 }
 
 .lightMeshBg {
-  background: #e6e6f0; background-image: radial-gradient(at 47.0% 96.0%, #a8abbd 0px, transparent 50%),radial-gradient(at 61.0% 15.0%, #d5dde8 0px, transparent 50%),radial-gradient(at 8.0% 16.0%, #c3ccde 0px, transparent 50%),radial-gradient(at 85.0% 28.0%, #b2abeb 0px, transparent 50%),radial-gradient(at 81.0% 66.0%, #ccd2e0 0px, transparent 50%)
+  background: #e6e6f0;
+  background-image: radial-gradient(at 47% 96%, #a8abbd 0px, transparent 50%),
+    radial-gradient(at 61% 15%, #d5dde8 0px, transparent 50%),
+    radial-gradient(at 8% 16%, #c3ccde 0px, transparent 50%),
+    radial-gradient(at 85% 28%, #b2abeb 0px, transparent 50%),
+    radial-gradient(at 81% 66%, #ccd2e0 0px, transparent 50%);
 }
