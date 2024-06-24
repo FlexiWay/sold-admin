@@ -515,7 +515,7 @@ export const useSold = () => {
 
       const resYieldUpdate = await txBuilder.sendAndConfirm(umi, {
         confirm: { commitment: "confirmed" },
-        send: { skipPreflight: true },
+        send: { skipPreflight: false },
       });
       console.log("Yield update confirmed:", resYieldUpdate.signature);
 
