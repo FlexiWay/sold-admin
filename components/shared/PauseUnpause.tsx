@@ -8,7 +8,7 @@ export const PauseUnpause = () => {
       <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10 bg-opacity-50 backdrop-blur-xl">
         <span className='text-xl font-black -mt-2'>Pause/Unpause</span>
         <div className="w-full flex items-center justify-center">
-          <div className={`${sold.tokenManager?.active ? `rounded-full p-2 bg-brand-secondary bg-opacity-20` : `rounded-full bg-black p-4`}`}>
+          <div className={`${sold.tokenManager?.active ? `rounded-full p-2 bg-brand-secondary bg-opacity-20 ` : `rounded-full bg-black p-4 animate-bounce`}`}>
             {
               !sold.tokenManager?.active ? <>
                 {/* pause */}
@@ -26,10 +26,18 @@ export const PauseUnpause = () => {
         </div>
         <div className="w-full flex items-center justify-center gap-4 mt-4">
           <button
-            className='secondaryCTA'
+            className={`${sold.tokenManager?.active ? 'secondaryCTA' : 'secondaryCTA'}`}
             onClick={sold.handleToggleActive}
+            disabled={sold.tokenManager?.active}
           >
-            {sold.tokenManager?.active ? "Pause" : "Unpause"}
+            Start
+          </button>
+          <button
+            className={`${sold.tokenManager?.active ? 'secondaryCTA' : 'secondaryCTA'}`}
+            onClick={sold.handleToggleActive}
+            disabled={!sold.tokenManager?.active}
+          >
+            Pause
           </button>
         </div>
       </div>

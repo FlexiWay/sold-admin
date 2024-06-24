@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 const UpdateModal = ({ open, setOpen }: any) => {
   const sold = useSold();
   const modalRef = useRef<HTMLDivElement>(null);
-  const [textareaValue, setTextareaValue] = useState('');
+  const [textareaValue, setTextareaValue] = useState('[]');
   const [error, setError] = useState('');
 
   const handleClickOutside = (event: React.MouseEvent) => {
@@ -50,7 +50,7 @@ const UpdateModal = ({ open, setOpen }: any) => {
         <div className="w-full flex flex-col items-center justify-center gap-4 mt-4">
           <textarea
             className="textarea textarea-bordered w-full bg-transparent"
-            placeholder='Paste the updated authority .json here...'
+            // placeholder='Paste the updated authority .json here...'
             value={textareaValue}
             onChange={handleTextareaChange}
           ></textarea>

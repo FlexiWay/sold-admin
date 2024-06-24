@@ -89,7 +89,6 @@ export const useSold = () => {
             try {
                 const response = await fetch('/api/get-allowlist');
                 if (!response.ok) {
-                    // Log more details about the response
                     console.error(`Error fetching allowlist: ${response.status} ${response.statusText}`);
                     throw new Error('Failed to fetch allowlist');
                 }
@@ -98,11 +97,9 @@ export const useSold = () => {
                 setAllowList(data.addresses);
             } catch (error) {
                 if (error instanceof Error) {
-                    // Log the error stack trace for more information
                     console.error("Failed to fetch allowlist:", error.message);
                     toast.error("Failed to fetch allowlist");
                 } else {
-                    // Handle other types of errors (just in case)
                     console.error("An unexpected error occurred:", error);
                     toast.error("An unexpected error occurred");
                 }
@@ -110,7 +107,7 @@ export const useSold = () => {
         };
 
         fetchAllowList();
-    }, [reset]);
+    }, []); 
 
 
     const refetch = () => {
@@ -485,5 +482,5 @@ export const useSold = () => {
         setLoading(false);
     };
 
-    return { tokenManager, poolManager, refetch, loading, createTestQuoteMint, handleSystemSetup, handleToggleActive, statCardData, handleDeposit, handleYieldUpdate, getCurrentYieldPercentage, handleUpdateAuthority, getPendingWithdrawAmount, handleInitiateWithdraw, handleWithdraw, getWithdrawIntiationTime, getWithdrawExecutionWindow, getWithdrawTimeLock, handleWithdrawTimeUpdate, allowList };
+    return { tokenManager, poolManager, refetch, loading, createTestQuoteMint, handleSystemSetup, handleToggleActive, updateAllowList, statCardData, handleDeposit, handleYieldUpdate, getCurrentYieldPercentage, handleUpdateAuthority, getPendingWithdrawAmount, handleInitiateWithdraw, handleWithdraw, getWithdrawIntiationTime, getWithdrawExecutionWindow, getWithdrawTimeLock, handleWithdrawTimeUpdate, allowList };
 };
