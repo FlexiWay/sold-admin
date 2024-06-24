@@ -1,14 +1,17 @@
-import { safeFetchPoolManager, safeFetchTokenManager, findPoolManagerPda, findTokenManagerPda, PoolManager, TokenManager, createTestQuote, SetupOptions, toggleActive, setup, depositFunds, updateTokenManagerAdmin, updateAnnualYield, SOLD_ISSUANCE_PROGRAM_ID, getMerkleRoot, initializeWithdrawFunds, withdrawFunds, updateTokenManagerOwner } from "@builderz/sold";
+import { safeFetchPoolManager, safeFetchTokenManager, findPoolManagerPda, findTokenManagerPda, PoolManager, TokenManager, createTestQuote,updateTokenManagerOwner, SetupOptions, toggleActive, setup, depositFunds, updateTokenManagerAdmin, updateAnnualYield, SOLD_ISSUANCE_PROGRAM_ID, getMerkleRoot, initializeWithdrawFunds, withdrawFunds } from "@builderz/sold";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import { createSplAssociatedTokenProgram, createSplTokenProgram, SPL_ASSOCIATED_TOKEN_PROGRAM_ID } from "@metaplex-foundation/mpl-toolbox"
 import { toast } from "sonner";
-import { TransactionBuilder, Umi } from "@metaplex-foundation/umi"
+import { TransactionBuilder, Umi, some, none } from "@metaplex-foundation/umi"
 import { findAssociatedTokenPda } from "@metaplex-foundation/mpl-toolbox"
 // @ts-ignore
 import bs58 from "bs58";
+import { PublicKey } from '@solana/web3.js';
+import { PublicKey as SolanaPublicKey } from '@solana/web3.js';
+import {publicKey} from '@metaplex-foundation/umi';
 
 // TODO: Move this into npm package
 const bigIntToFloat = (bigIntValue: bigint, decimals: number): number => {
@@ -25,7 +28,9 @@ export const useSold = () => {
 
     const [tokenManager, setTokenManager] = useState<TokenManager | null>(null);
     const [poolManager, setPoolManager] = useState<PoolManager | null>(null);
-    console.log(Number(poolManager?.annualYieldRate));
+    // console.log(Number(poolManager?.annualYieldRate));
+    const [owner, setOwner] = useState<PublicKey | null>(null);
+    const [admin, setAdmin] = useState<PublicKey | null>(null);
 
     const [allowList, setAllowList] = useState<string[]>([]);
 
@@ -52,6 +57,7 @@ export const useSold = () => {
     umi.programs.add(createSplTokenProgram());
 
     umi.use(walletAdapterIdentity(wallet))
+    
 
     const tokenManagerPubKey = findTokenManagerPda(umi);
     const poolManagerPubKey = findPoolManagerPda(umi);
@@ -86,29 +92,50 @@ export const useSold = () => {
 
     useEffect(() => {
         const fetchAllowList = async () => {
-            try {
-                const response = await fetch('/api/get-allowlist');
-                if (!response.ok) {
-                    console.error(`Error fetching allowlist: ${response.status} ${response.statusText}`);
-                    throw new Error('Failed to fetch allowlist');
-                }
-                const data = await response.json();
-                toast.success("Allowlist fetched successfully");
-                setAllowList(data.addresses);
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.error("Failed to fetch allowlist:", error.message);
-                    toast.error("Failed to fetch allowlist");
-                } else {
-                    console.error("An unexpected error occurred:", error);
-                    toast.error("An unexpected error occurred");
+            if (allowList.length === 0) { 
+                try {
+                    const response = await fetch('/api/get-allowlist');
+                    if (!response.ok) {
+                        console.error(`Error fetching allowlist: ${response.status} ${response.statusText}`);
+                        throw new Error('Failed to fetch allowlist');
+                    }
+                    const data = await response.json();
+                    toast.success("Allowlist fetched successfully");
+                    setAllowList(data.addresses);
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.error("Failed to fetch allowlist:", error.message);
+                        toast.error("Failed to fetch allowlist");
+                    } else {
+                        console.error("An unexpected error occurred:", error);
+                        toast.error("An unexpected error occurred");
+                    }
                 }
             }
         };
 
         fetchAllowList();
-    }, []); 
+    }, [allowList]); 
 
+  useEffect(() => {
+    const fetchState = async () => {
+      setLoading(true);
+
+      const tokenManagerAcc = await safeFetchTokenManager(umi, tokenManagerPubKey);
+      setTokenManager(tokenManagerAcc);
+
+      if (tokenManagerAcc) {
+        setOwner(new PublicKey(tokenManagerAcc.owner));
+        setAdmin(new PublicKey(tokenManagerAcc.admin));
+      }
+
+      setLoading(false);
+    };
+
+    if (wallet.publicKey) {
+      fetchState();
+    }
+  }, [wallet.publicKey]);
 
     const refetch = () => {
         setReset(prev => prev + 1);
@@ -382,44 +409,82 @@ export const useSold = () => {
         setLoading(false);
     };
 
-    const handleUpdateAuthority = async (newAllowedWallets: any) => {
-        setLoading(true);
-        try {
-            if (!tokenManager) {
-                throw new Error("Token Manager is not set");
-            }
 
-            // const newAllowedWallets = ["4GG9RNpVhhH5Q6oqQtMs9wqmeuQBTeVQbXfWyJRJJHv6"];
-            //const originalMerkleRoot=tokenManager.merkleRoot;
-            console.log(newAllowedWallets);
-            const newMerkleRoot = getMerkleRoot(newAllowedWallets);
-
-            let txBuilder = new TransactionBuilder();
-
-            txBuilder = txBuilder.add(updateTokenManagerAdmin(umi, {
-                tokenManager: tokenManagerPubKey,
-                admin: umi.identity,
-                newMerkleRoot: newMerkleRoot,
-                newGateKeepers: null,
-                newMintLimitPerSlot: null,
-                newRedemptionLimitPerSlot: null
-            }));
-
-            console.log(txBuilder);
-
-            const resAdminUpdate = await txBuilder.sendAndConfirm(umi);
-            console.log(bs58.encode(resAdminUpdate.signature));
-
-            //console.log('admin update confirmed:', resAdminUpdate.signature);
-
-            toast.success('Admin updated successful');
-            refetch();
-        } catch (e) {
-            console.error("Failed to handle admin update:", e);
-            toast.error("Failed to handle admin update");
-            refetch();
+    const handleUpdateAdmin = async (newAdminPublicKey: string) => {
+    setLoading(true);
+    try {
+        if (!tokenManager) {
+        throw new Error("Token Manager is not set");
         }
+
+        // Ensure the newAdminPublicKey is a valid public key
+        const newAdminPubKeyInstance = publicKey(newAdminPublicKey);
+
+        let transactionBuilder = new TransactionBuilder();
+
+        transactionBuilder = transactionBuilder.add(updateTokenManagerOwner(umi, {
+            tokenManager: tokenManagerPubKey,
+            owner: umi.identity,
+            
+            newOwner: none(),
+            newAdmin: some(newAdminPubKeyInstance), 
+            newMinter: none(),
+            emergencyFundBasisPoints: none(),
+            newWithdrawTimeLock: none(),
+            newWithdrawExecutionWindow: none(),
+        }));
+
+        const resAdminUpdate = await transactionBuilder.sendAndConfirm(umi);
+        console.log(bs58.encode(resAdminUpdate.signature));
+
+        toast.success('Admin updated successfully');
+        refetch();
+    } catch (e) {
+        console.error("Failed to handle admin update:", e);
+        // Handle 'e' being of type 'unknown'
+        const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred';
+        toast.error("Failed to handle admin update: " + errorMessage);
+    } finally {
         setLoading(false);
+    }
+    };
+
+    const handleUpdateOwner = async (newOwnerPublicKey: string) => {
+    setLoading(true);
+    try {
+        if (!tokenManager) {
+        throw new Error("Token Manager is not set");
+        }
+
+        // Ensure the newOwnerPublicKey is a valid public key
+        const newOwnerPubKeyInstance = publicKey(newOwnerPublicKey);
+
+        let transactionBuilder = new TransactionBuilder();
+
+        transactionBuilder = transactionBuilder.add(updateTokenManagerOwner(umi, {
+            tokenManager: tokenManagerPubKey,
+            owner: umi.identity,
+            newOwner: some(newOwnerPubKeyInstance),
+            newAdmin: none(),
+            newMinter: none(),
+            emergencyFundBasisPoints: none(),
+            newWithdrawTimeLock: none(),
+            newWithdrawExecutionWindow: none(),
+        }));
+
+        const resOwnerUpdate = await transactionBuilder.sendAndConfirm(umi);
+        console.log(bs58.encode(resOwnerUpdate.signature));
+
+        toast.success('Owner updated successfully');
+        refetch();
+    } catch (e) {
+        console.error("Failed to handle owner update:", e);
+        // Handle 'e' being of type 'unknown'
+        const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred';
+        toast.error("Failed to handle owner update: " + errorMessage);
+    } finally {
+        setLoading(false);
+    }
     }
 
     const handleWithdrawTimeUpdate = async (LockTimeSecs: number | null, excutionTimeSecs: number | null) => {
@@ -482,5 +547,30 @@ export const useSold = () => {
         setLoading(false);
     };
 
-    return { tokenManager, poolManager, refetch, loading, createTestQuoteMint, handleSystemSetup, handleToggleActive, updateAllowList, statCardData, handleDeposit, handleYieldUpdate, getCurrentYieldPercentage, handleUpdateAuthority, getPendingWithdrawAmount, handleInitiateWithdraw, handleWithdraw, getWithdrawIntiationTime, getWithdrawExecutionWindow, getWithdrawTimeLock, handleWithdrawTimeUpdate, allowList };
+    return { 
+        tokenManager,
+        poolManager, 
+        refetch,
+        loading, 
+        createTestQuoteMint,
+        handleSystemSetup, 
+        handleToggleActive, 
+        updateAllowList, 
+        statCardData,
+        handleDeposit,
+        handleYieldUpdate,
+        getCurrentYieldPercentage, 
+        handleUpdateAdmin, 
+        getPendingWithdrawAmount,
+        handleInitiateWithdraw,
+        handleWithdraw,
+        getWithdrawIntiationTime,
+        getWithdrawExecutionWindow, 
+        getWithdrawTimeLock, 
+        handleWithdrawTimeUpdate,
+        allowList,
+        handleUpdateOwner,
+        admin,
+        owner
+     };
 };

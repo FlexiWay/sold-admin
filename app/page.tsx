@@ -6,6 +6,7 @@ import StatsCards from '../components/shared/StatsCards';
 import ThirdRow from '../components/shared/ThirdRow';
 import { useSold } from '../hooks/useSold';
 import Setup from '../components/shared/Setup';
+import { Spin } from 'antd';
 
 const Index: React.FC = () => {
 
@@ -23,7 +24,7 @@ const Index: React.FC = () => {
 
   if (sold.loading) {
     return <div className='flex items-center justify-center '>
-      <h1>Loading...</h1>
+      <Spin size='large' />
     </div>
   }
 
