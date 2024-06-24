@@ -1,9 +1,8 @@
 import { useSold } from "../../hooks/useSold";
-import { Spin } from 'antd';
+import { Spin } from "antd";
 
 export const PauseUnpause = () => {
   const sold = useSold();
-
 
   return (
     <>
@@ -62,14 +61,14 @@ export const PauseUnpause = () => {
             onClick={sold.handleToggleActive}
             disabled={sold.tokenManager?.active || sold.loading}
           >
-            {sold.loading ? <Spin size='small' /> : "Unpause"}
+            {sold.loading ? <Spin size="small" /> : "Unpause"}
           </button>
           <button
             className={`${sold.tokenManager?.active ? "secondaryCTA" : "secondaryCTA"}`}
             onClick={sold.handleToggleActive}
             disabled={!sold.tokenManager?.active || sold.loading}
           >
-            {sold.loading ? <Spin size='small' /> : "Pause"}
+            {sold.loading ? <Spin size="small" /> : "Pause"}
           </button>
         </div>
       </div>
