@@ -61,7 +61,7 @@ export const useSold = () => {
     allowList, setAllowList,
     reset, setReset,
     statCardData, setStatCardData,
-    listFetched,setListFetched,
+    listFetched, setListFetched,
   } = useSoldStateContext();
 
   const wallet = useWallet();
@@ -89,7 +89,7 @@ export const useSold = () => {
       setTokenManager(tokenManagerAcc);
       setPoolManager(poolManagerAcc);
 
-      console.log("Token Manager: ",tokenManagerAcc);
+      console.log("Token Manager: ", tokenManagerAcc);
 
       // Stat stat cards
       tokenManagerAcc &&
@@ -539,7 +539,6 @@ export const useSold = () => {
         updateTokenManagerOwner(umi, {
           tokenManager: tokenManagerPubKey,
           owner: umi.identity,
-          newOwner: none(),
           newAdmin: some(newAdminPubKeyInstance),
           newMinter: none(),
           emergencyFundBasisPoints: none(),
@@ -580,7 +579,6 @@ export const useSold = () => {
         updateTokenManagerOwner(umi, {
           tokenManager: tokenManagerPubKey,
           owner: umi.identity,
-          newOwner: some(newOwnerPubKeyInstance),
           newAdmin: none(),
           newMinter: none(),
           emergencyFundBasisPoints: none(),
@@ -702,7 +700,6 @@ export const useSold = () => {
           tokenManager: tokenManagerPubKey,
           owner: umi.identity,
           newWithdrawTimeLock: LockTimeSecs,
-          newOwner: null,
           newAdmin: null,
           newMinter: null,
           emergencyFundBasisPoints: null,

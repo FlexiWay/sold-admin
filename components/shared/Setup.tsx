@@ -6,10 +6,13 @@ import { Spin, Tooltip } from "antd";
 
 const Setup: React.FC = () => {
   const [setupOptions, setSetupOptions] = useState<SetupOptions>({
-    baseMintName: "SOLD",
-    baseMintSymbol: "SOLD",
+    baseMintName: "PUSD",
+    baseMintSymbol: "PUSD",
     baseMintUri:
       "https://shdw-drive.genesysgo.net/4d35gSa4Z8WHF265V196rhdgdZ6jFzpLULmeczQUjG5t/pusd_metadata.json",
+    xMintName: "sPUSD",
+    xMintSymbol: "sPUSD",
+    xMintUri: "https://shdw-drive.genesysgo.net/4d35gSa4Z8WHF265V196rhdgdZ6jFzpLULmeczQUjG5t/spusd_metadata.json",
     baseMintDecimals: 6,
     xMintDecimals: 6,
     quoteMint: "",
@@ -85,6 +88,7 @@ const Setup: React.FC = () => {
 
       <form onSubmit={handleSetup}>
         <div className="w-full grid gird-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
+          {/* Main Mint */}
           <label className="flex flex-col gap-2 items-start justify-start">
             Base Mint Name
             <input
@@ -115,6 +119,38 @@ const Setup: React.FC = () => {
               className="input input-bordered w-full bg-transparent"
             />
           </label>
+          {/* xMint details */}
+          <label className="flex flex-col gap-2 items-start justify-start">
+            Staked Mint Name
+            <input
+              type="text"
+              name="stakedMintName"
+              value={setupOptions.xMintName}
+              onChange={handleInputChange}
+              className="input input-bordered w-full bg-transparent"
+            />
+          </label>
+          <label className="flex flex-col gap-2 items-start justify-start">
+            Staked Mint Symbol
+            <input
+              type="text"
+              name="xMintSymbol"
+              value={setupOptions.xMintSymbol}
+              onChange={handleInputChange}
+              className="input input-bordered w-full bg-transparent"
+            />
+          </label>
+          <label className="flex flex-col gap-2 items-start justify-start">
+            Staked Mint URI
+            <input
+              type="text"
+              name="xMintUri"
+              value={setupOptions.xMintUri}
+              onChange={handleInputChange}
+              className="input input-bordered w-full bg-transparent"
+            />
+          </label>
+          {/* go on */}
           <label className="flex flex-col gap-2 items-start justify-start">
             Base Mint Decimals
             <input
