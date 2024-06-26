@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef,useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSold } from "../../hooks/useSold";
 import { toast } from "sonner";
 import { PublicKey } from "@solana/web3.js";
@@ -115,35 +115,24 @@ export default function GateKeeperUpdate() {
 
   return (
     <>
-      <div className="w-full flex flex-col items-center justify-center gap-2 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
-        <div className="w-full flex items-center justify-start">
+      <div className="w-full flex flex-col items-center justify-between gap-4 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
+        <div className="w-full flex items-center justify-center">
           <span className="text-xl font-black">Gatekeepers</span>
         </div>
-        <div className="max-w-md mx-auto">
-          <div className="w-full flex items-center justify-center gap-4 mt-4">
-            <div className="w-full flex flex-col items-start justify-between gap-2 h-4 bg-gray-500 bg-opacity-50 overflow-y-scroll">
-              {/* {sold.gateKeepers.length > 0 &&
+        <div className="w-full">
+          <div className="w-full flex items-center justify-center gap-4">
+            {/* <div className="w-full flex flex-col items-start justify-between gap-2 h-4 bg-gray-500 bg-opacity-50 overflow-y-scroll">
+              {sold.gateKeepers.length > 0 &&
                 sold.gateKeepers.map((keeper, index) => (
                   <span key={index} className="text-xs text-white truncate">
                     {keeper.toBase58()}
                   </span>
-                ))} */}
-            </div>
-            <button className="secondaryCTA" onClick={() => setOpen(true)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                />
-              </svg>
+                ))}
+            </div> */}
+            <button
+              className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
+              onClick={() => setOpen(true)}>
+              Update
             </button>
           </div>
         </div>

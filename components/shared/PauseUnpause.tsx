@@ -6,11 +6,11 @@ export const PauseUnpause = () => {
 
   return (
     <>
-      <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10 bg-opacity-50 backdrop-blur-xl">
+      <div className="w-full flex flex-col items-center justify-center gap-6 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10 bg-opacity-50 backdrop-blur-xl">
         <span className="text-xl font-black -mt-2">Pause/Unpause</span>
         <div className="w-full flex items-center justify-center">
           <div
-            className={`${sold.tokenManager?.active ? `rounded-full p-2 bg-brand-secondary bg-opacity-20 ` : `rounded-full bg-black p-4 animate-bounce`}`}
+            className={`cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 flex items-center justify-center ${sold.tokenManager?.active ? `rounded-full p-2 bg-[#1B1E24] bg-opacity-100 ` : `rounded-full bg-black p-4 animate-bounce`}`}
           >
             {!sold.tokenManager?.active ? (
               <>
@@ -21,7 +21,7 @@ export const PauseUnpause = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-6 animate-pulse  cursor-pointer"
+                  className="size-12 -mr-2 -mt-2 "
                   onClick={sold.handleToggleActive}
                 >
                   <path
@@ -40,7 +40,7 @@ export const PauseUnpause = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="size-8   cursor-pointer bg-brand-secondary bg-opacity-40 rounded-full p-2 hover:scale-105 transition-all duration-300 ease-in-out"
+                  className="size-8   "
                   onClick={() => {
                     sold.handleToggleActive;
                   }}
@@ -55,7 +55,7 @@ export const PauseUnpause = () => {
             )}
           </div>
         </div>
-        <div className="w-full flex items-center justify-center gap-4 mt-4">
+        {/* <div className="w-full flex items-center justify-center gap-4 mt-4">
           <button
             className={`${sold.tokenManager?.active ? "secondaryCTA" : "secondaryCTA"}`}
             onClick={sold.handleToggleActive}
@@ -70,7 +70,7 @@ export const PauseUnpause = () => {
           >
             {sold.loading ? <Spin size="small" /> : "Pause"}
           </button>
-        </div>
+        </div> */}
       </div>
     </>
   );

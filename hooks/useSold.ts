@@ -17,6 +17,7 @@ import {
   getMerkleRoot,
   initializeWithdrawFunds,
   withdrawFunds,
+  calculateExchangeRate,
 } from "@builderz/sold";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
@@ -51,6 +52,7 @@ const bigIntWithDecimal = (amount: number, decimal: number) => {
 let isFetching = false;//local variable so it wont re-render
 export const useSold = () => {
   const [loading, setLoading] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState(0);
 
   const {
     tokenManager, setTokenManager,
@@ -90,6 +92,24 @@ export const useSold = () => {
       setPoolManager(poolManagerAcc);
 
       console.log("Token Manager: ", tokenManagerAcc);
+
+            // Calculate exchange rate if poolManager is available
+      if (poolManagerAcc) {
+        const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
+        const lastYieldChangeTimestamp = Number(
+          poolManagerAcc.lastYieldChangeTimestamp,
+        ); // Convert bigint to number
+        const lastYieldChangeExchangeRate = Number(
+          poolManagerAcc.lastYieldChangeExchangeRate,
+        ); // Convert bigint to number
+        const rate = calculateExchangeRate(
+          lastYieldChangeTimestamp,
+          currentTimestamp,
+          Number(poolManagerAcc.annualYieldRate), // Convert bigint to number
+          lastYieldChangeExchangeRate,
+        );
+        setExchangeRate(rate);
+      }
 
       // Stat stat cards
       tokenManagerAcc &&
@@ -182,6 +202,13 @@ export const useSold = () => {
   const refetch = () => {
     setReset((prev) => prev + 1);
   };
+
+   const annualYieldRate = poolManager
+    ? (Number(poolManager.annualYieldRate) / 100).toString()
+    : "0";
+
+
+    
 
   const getPendingWithdrawAmount = () => {
     return tokenManager?.pendingWithdrawalAmount;
@@ -783,6 +810,7 @@ export const useSold = () => {
     handleUpdateGatekeeper,
     handleWhiteList,
     listFetched,
-    setListFetched
+    setListFetched,
+    annualYieldRate
   };
 };
