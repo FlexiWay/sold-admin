@@ -156,10 +156,11 @@ select {
 }
 
 /* Custom Wallet Button */
-.mymultibutton {
-  @apply bg-black text-white hover:text-black hover:bg-builderz-blue !important;
-  border: 1px solid black !important;
-}
+  .mymultibutton,
+  .wallet-adapter-button {
+    @apply  text-white  hover:bg-opacity-80 flex items-center justify-center break-before-avoid !important;
+    border: 1px solid black !important;
+  }
 
 /* Body styles */
 body {
@@ -234,143 +235,6 @@ body::-webkit-scrollbar-thumb {
 /* NavigationLink Hover */
 .navLink {
   @apply px-2 py-1 rounded-md hover:text-[#43b083] dark:hover:text-[#14F195] bg-opacity-20;
-}
-
-/* Glow Buttons */
-.glow-on-hover {
-  @apply bg-transparent text-black dark:text-white hover:text-white;
-  height: 50px;
-  min-width: 150px;
-  border: 1px solid gray;
-  outline: none;
-
-  cursor: pointer;
-  position: relative;
-  z-index: 0;
-  border-radius: 10px;
-}
-.glow {
-  @apply text-black dark:text-white;
-  min-width: 150px;
-  height: 50px;
-  border: none;
-  outline: none;
-
-  cursor: pointer;
-  position: relative;
-  z-index: 0;
-  border-radius: 10px;
-}
-
-.glow-on-hover:before {
-  content: "";
-  background: linear-gradient(
-    45deg,
-    #ff0000,
-    #ff7300,
-    #fffb00,
-    #48ff00,
-    #00ffd5,
-    #002bff,
-    #7a00ff,
-    #ff00c8,
-    #ff0000
-  );
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  background-size: 400%;
-  z-index: -1;
-  filter: blur(5px);
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  animation: glowing 20s linear infinite;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  border-radius: 10px;
-}
-.glow:before {
-  content: "";
-  background: linear-gradient(
-    45deg,
-    #ff0000,
-    #ff7300,
-    #fffb00,
-    #48ff00,
-    #00ffd5,
-    #002bff,
-    #7a00ff,
-    #ff00c8,
-    #ff0000
-  );
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  background-size: 400%;
-  z-index: -1;
-  filter: blur(5px);
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  animation: glowing 20s linear infinite;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  border-radius: 10px;
-}
-
-.glow-on-hover:active {
-  color: #000;
-}
-.glow:active {
-  color: #000;
-}
-
-.glow-on-hover:active:after {
-  background: transparent;
-}
-.glow:active:after {
-  background: transparent;
-}
-
-.glow-on-hover:hover:before {
-  opacity: 1;
-}
-.glow:before {
-  opacity: 1;
-}
-
-.glow-on-hover:after {
-  @apply bg-transparent text-black dark:text-white;
-  z-index: -1;
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  border-radius: 10px;
-}
-.glow:after {
-  @apply bg-transparent text-black dark:text-white;
-  z-index: -1;
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  border-radius: 10px;
-}
-
-@keyframes glowing {
-  0% {
-    background-position: 0 0;
-  }
-  50% {
-    background-position: 400% 0;
-  }
-  100% {
-    background-position: 0 0;
-  }
 }
 
 .css-i4bv87-MuiSvgIcon-root {

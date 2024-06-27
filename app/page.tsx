@@ -7,6 +7,9 @@ import ThirdRow from "../components/shared/ThirdRow";
 import { useSold } from "../hooks/useSold";
 import Setup from "../components/shared/Setup";
 import { Spin } from "antd";
+import { Logo } from '../components/Logo';
+import MyMultiButton from '../components/layout/MyMultiButton';
+import Image from "next/image";
 
 const Index: React.FC = () => {
   const wallet = useWallet();
@@ -16,8 +19,15 @@ const Index: React.FC = () => {
   // TODO: Wallet Check
   if (!wallet.connected) {
     return (
-      <div className="flex items-center justify-center ">
-        <h1>Please connect your wallet</h1>
+      <div className="flex flex-col gap-8 items-center justify-center mt-10">
+        <Image
+          src="/logo.svg"
+          width={140}
+          height={140}
+          alt=""
+          className="w-3/4 md:w-2/4 lg:w-1/4"
+        />        <h1>Please connect your wallet</h1>
+        <MyMultiButton />
       </div>
     );
   }
