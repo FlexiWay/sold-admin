@@ -5,6 +5,7 @@ import AdminUpdate from "./AdminUpdate";
 import OwnerUpdate from "./OwnerUpdate";
 import MetadataUpdate from './MetadataUpdate';
 import { PauseUnpause } from './PauseUnpause';
+import PoolOwnerUpdate from "./PoolOwnerUpdate";
 
 export default function ThirdRow() {
   return (
@@ -15,6 +16,7 @@ export default function ThirdRow() {
         <PauseUnpause />
         <AdminUpdate />
         <OwnerUpdate />
+        <PoolOwnerUpdate/>
         <MetadataUpdate />
       </div>
     </>

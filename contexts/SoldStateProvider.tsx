@@ -62,7 +62,6 @@ export const SoldStateProvider = ({ children }:any) => {
 
   const [listFetched, setListFetched] = useState<boolean>(false);
 
-
   return (
     <SoldStateContext.Provider
       value={{

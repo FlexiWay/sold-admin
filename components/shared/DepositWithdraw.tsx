@@ -21,7 +21,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
   const handleInputChange = (event: { target: { value: string } }) => {
     const value = event.target.value;
     const numValue = parseInt(value, 10);
-    if (!isNaN(numValue)) {
+    if (!isNaN(numValue) && numValue >=0) {
       setInputValue(numValue);
     }
   };

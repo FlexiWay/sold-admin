@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSold } from "../../hooks/useSold";
 import { toast } from "sonner";
+import { PublicKey } from "@solana/web3.js";
 
 const OwnerUpdateModal = ({ open, setOpen }: any) => {
   const sold = useSold();
   const modalRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
-
   const [loading, setLoading] = useState(false);
 
   const handleClickOutside = (event: React.MouseEvent) => {
@@ -27,7 +27,8 @@ const OwnerUpdateModal = ({ open, setOpen }: any) => {
     setLoading(true);
     try {
       if (inputValue.trim()) {
-        await sold.handleUpdateOwner(inputValue.trim());
+        //await sold.handleUpdateOwner(inputValue.trim());
+        await sold.handleInitiateOwner(inputValue.trim());
         setOpen(false);
       } else {
         throw new Error("Invalid input");
@@ -68,7 +69,7 @@ const OwnerUpdateModal = ({ open, setOpen }: any) => {
             type="text"
             className="input input-bordered w-full bg-transparent"
             value={inputValue}
-            placeholder="Enter new onwer..."
+            placeholder="Enter new owner..."
             onChange={handleInputChange}
           />
           {error && <span className="text-red-500">{error}</span>}
@@ -85,18 +86,51 @@ const OwnerUpdateModal = ({ open, setOpen }: any) => {
 
 export default function OwnerUpdate() {
   const [open, setOpen] = useState(false);
+  const [isPendingOwner, setIsPendingOwner] = useState(false);
   const sold = useSold();
+
+  useEffect(() => {
+    try {
+      const pendingowner = new PublicKey(sold?.tokenManager!.pendingOwner);
+      if (sold.getConnectedWalletPubKey() === pendingowner.toBase58()) {
+        //console.log("connecting user is the pending owner")
+        setIsPendingOwner(true);
+      } else {
+        //console.log("connected wallet is not the pending owner");
+        setIsPendingOwner(false);
+      }
+    } catch (error: any) {
+      console.error("Failed to check pending owner:", error.message);
+      setIsPendingOwner(false);
+    }
+  }, [sold.tokenManager]);
+
+  const getPendingOwnerPubKey = () => {
+    if (sold.tokenManager)
+      return (new PublicKey(sold.tokenManager.pendingOwner).toBase58()) || "";
+  }
+
+  const isValidPublicKey = (key: string): boolean => {
+    try {
+      if (key != "11111111111111111111111111111111") {
+        new PublicKey(key);
+        return true;
+      } else { return false; }
+    } catch (error) {
+      return false;
+    }
+  };
 
   return (
     <>
       <div className="w-full flex flex-col items-center justify-center gap-2 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
         <div className="w-full flex items-center justify-start">
-          <span className="text-xl font-black -mt-2">Owner</span>
+          <span className="text-xl font-black -mt-2">Issuance Owner {isValidPublicKey(sold.tokenManager?.pendingOwner || "0") ? "(pending)" : ""}</span>
         </div>
         <div className="w-full max-w-md mx-auto">
           <div className="w-full flex items-center justify-between gap-4 mt-4">
             <span className="text-xs text-white truncate w-3/4">
-              {sold.owner?.toBase58()}
+              {isValidPublicKey(sold.tokenManager?.pendingOwner || "0") ? getPendingOwnerPubKey() || sold.owner?.toBase58() : sold.owner?.toBase58()}
             </span>
             <button className="btn btn-sm" onClick={() => setOpen(true)}>
               <svg
@@ -114,6 +148,9 @@ export default function OwnerUpdate() {
                 />
               </svg>
             </button>
+            {isPendingOwner && <button className="btn btn-sm" onClick={() => sold.handleAcceptUpdateOwner()}>
+              ACCEPT
+            </button>}
           </div>
         </div>
       </div>

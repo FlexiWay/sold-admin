@@ -90,7 +90,7 @@ export default function AdminUpdate() {
     <>
       <div className="w-full flex flex-col items-center justify-center gap-2 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
         <div className="w-full flex items-center justify-start">
-          <span className="text-xl font-black -mt-2">Amin</span>
+          <span className="text-xl font-black -mt-2">Admin</span>
         </div>
         <div className="w-full max-w-md mx-auto">
           <div className="w-full flex items-center justify-between gap-4 mt-4">

@@ -18,6 +18,10 @@ import {
   initializeWithdrawFunds,
   withdrawFunds,
   calculateExchangeRate,
+  initiateUpdateManagerOwner,
+  updateManagerOwner,
+  initiateUpdatePoolOwner,
+  updatePoolOwner,
 } from "@builderz/sold";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
@@ -92,8 +96,9 @@ export const useSold = () => {
       setPoolManager(poolManagerAcc);
 
       console.log("Token Manager: ", tokenManagerAcc);
+      console.log("Pool Manager : ",poolManagerAcc);
 
-            // Calculate exchange rate if poolManager is available
+      // Calculate exchange rate if poolManager is available
       if (poolManagerAcc) {
         const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
         const lastYieldChangeTimestamp = Number(
@@ -203,12 +208,9 @@ export const useSold = () => {
     setReset((prev) => prev + 1);
   };
 
-   const annualYieldRate = poolManager
+  const annualYieldRate = poolManager
     ? (Number(poolManager.annualYieldRate) / 100).toString()
     : "0";
-
-
-    
 
   const getPendingWithdrawAmount = () => {
     return tokenManager?.pendingWithdrawalAmount;
@@ -233,6 +235,10 @@ export const useSold = () => {
       return 0;
     }
   };
+
+  const getConnectedWalletPubKey=()=>{
+    return umi.identity.publicKey ;
+  }
 
   const createTestQuoteMint = async (setupOptions: SetupOptions) => {
     setLoading(true);
@@ -590,34 +596,134 @@ export const useSold = () => {
     }
   };
 
-  const handleUpdateOwner = async (newOwnerPublicKey: string) => {
+  const handleInitiateOwner = async (newOwnerPubkey: string) => {
+    setLoading(true);
+    try {
+      if (!tokenManager) {
+        throw new Error("Token Manager is not set");
+      }
+      // Ensure the newOwnerPublicKey is a valid public key
+      const newOwnerPubKeyInstance = publicKey(newOwnerPubkey);
+      let transactionBuilder = new TransactionBuilder();
+
+      transactionBuilder = transactionBuilder.add(
+        initiateUpdateManagerOwner(umi, {
+          tokenManager: tokenManagerPubKey,
+          owner: umi.identity,
+          newOwner: newOwnerPubKeyInstance
+        }),
+      );
+
+      const resInitiateOwnerUpdate = await transactionBuilder.sendAndConfirm(umi, {
+        confirm: { commitment: "confirmed" },
+      });
+      console.log(bs58.encode(resInitiateOwnerUpdate.signature));
+
+      toast.success("Owner Initiated successfully");
+      refetch();
+    } catch (e) {
+      console.error("Failed to handle Initiate owner update:", e);
+      // Handle 'e' being of type 'unknown'
+      const errorMessage =
+        e instanceof Error ? e.message : "An unknown error occurred";
+      toast.error("Failed to handle Initiate owner update: " + errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleAcceptUpdateOwner = async () => {
     setLoading(true);
     try {
       if (!tokenManager) {
         throw new Error("Token Manager is not set");
       }
 
+      let transactionBuilder = new TransactionBuilder();
+
+      transactionBuilder = transactionBuilder.add(
+        updateManagerOwner(umi, {
+          tokenManager: tokenManagerPubKey,
+          newOwner: umi.identity
+        }),
+      );
+
+      const resOwnerUpdate = await transactionBuilder.sendAndConfirm(umi, {
+        confirm: { commitment: "confirmed" },
+      });
+
+      console.log(bs58.encode(resOwnerUpdate.signature));
+      toast.success("Owner updated successfully");
+      refetch();
+    } catch (e) {
+      console.error("Failed to handle owner update:", e);
+      // Handle 'e' being of type 'unknown'
+      const errorMessage =
+        e instanceof Error ? e.message : "An unknown error occurred";
+      toast.error("Failed to handle owner update: " + errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInitiatePoolOwner = async (newOwnerPubkey: string) => {
+    setLoading(true);
+    try {
+      if (!poolManager) {
+        throw new Error("Pool Manager is not set");
+      }
       // Ensure the newOwnerPublicKey is a valid public key
-      const newOwnerPubKeyInstance = publicKey(newOwnerPublicKey);
+      const newOwnerPubKeyInstance = publicKey(newOwnerPubkey);
+      let transactionBuilder = new TransactionBuilder();
+
+      transactionBuilder = transactionBuilder.add(
+        initiateUpdatePoolOwner(umi, {
+          poolManager: poolManagerPubKey,
+          owner: umi.identity,
+          newOwner: newOwnerPubKeyInstance
+        }),
+      );
+
+      const resInitiateOwnerUpdate = await transactionBuilder.sendAndConfirm(umi, {
+        confirm: { commitment: "confirmed" },
+      });
+      console.log(bs58.encode(resInitiateOwnerUpdate.signature));
+
+      toast.success("Pool Owner Initiated successfully");
+      refetch();
+    } catch (e) {
+      console.error("Failed to handle Initiate owner update:", e);
+      // Handle 'e' being of type 'unknown'
+      const errorMessage =
+        e instanceof Error ? e.message : "An unknown error occurred";
+      toast.error("Failed to handle Initiate owner update: " + errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleAcceptUpdatePoolOwner = async () => {
+    setLoading(true);
+    try {
+      if (!poolManager) {
+        throw new Error("Pool Manager is not set");
+      }
 
       let transactionBuilder = new TransactionBuilder();
 
       transactionBuilder = transactionBuilder.add(
-        updateTokenManagerOwner(umi, {
-          tokenManager: tokenManagerPubKey,
-          owner: umi.identity,
-          newAdmin: none(),
-          newMinter: none(),
-          emergencyFundBasisPoints: none(),
-          newWithdrawTimeLock: none(),
-          newWithdrawExecutionWindow: none(),
+        updatePoolOwner(umi, {
+          poolManager: poolManagerPubKey,
+          newOwner: umi.identity
         }),
       );
 
-      const resOwnerUpdate = await transactionBuilder.sendAndConfirm(umi);
-      console.log(bs58.encode(resOwnerUpdate.signature));
+      const resOwnerUpdate = await transactionBuilder.sendAndConfirm(umi, {
+        confirm: { commitment: "confirmed" },
+      });
 
-      toast.success("Owner updated successfully");
+      console.log(bs58.encode(resOwnerUpdate.signature));
+      toast.success("Pool Owner updated successfully");
       refetch();
     } catch (e) {
       console.error("Failed to handle owner update:", e);
@@ -803,7 +909,7 @@ export const useSold = () => {
     getWithdrawTimeLock,
     handleWithdrawTimeUpdate,
     allowList,
-    handleUpdateOwner,
+    handleAcceptUpdateOwner,
     admin,
     owner,
     gateKeepers,
@@ -811,6 +917,10 @@ export const useSold = () => {
     handleWhiteList,
     listFetched,
     setListFetched,
-    annualYieldRate
+    annualYieldRate,
+    getConnectedWalletPubKey,
+    handleInitiateOwner,
+    handleInitiatePoolOwner,
+    handleAcceptUpdatePoolOwner,
   };
 };
