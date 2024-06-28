@@ -20,8 +20,11 @@ import {
   calculateExchangeRate,
   initiateUpdateManagerOwner,
   updateManagerOwner,
+  SOLD_STAKING_PROGRAM_ID,
   initiateUpdatePoolOwner,
   updatePoolOwner,
+  updateXmintMetadata,
+  updateMintMetadata
 } from "@builderz/sold";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
@@ -43,6 +46,7 @@ import {
   publicKey,
 } from "@metaplex-foundation/umi-public-keys";
 import { useSoldStateContext } from "../contexts/SoldStateProvider";
+import { findMetadataPda, safeFetchMetadata } from "@metaplex-foundation/mpl-token-metadata";
 
 // TODO: Move this into npm package
 const bigIntToFloat = (bigIntValue: bigint, decimals: number): number => {
@@ -887,6 +891,74 @@ export const useSold = () => {
     setLoading(false);
   };
 
+
+const handleMetadataUpdate = async (metadataValues:any) => {
+  setLoading(true);
+  toast.loading("Updating Metadata...");
+
+  try {
+    console.log("Starting metadata update...");
+
+    const baseMint = umi.eddsa.findPda(SOLD_ISSUANCE_PROGRAM_ID, [Buffer.from("mint")]);
+    const baseMetadata = findMetadataPda(umi, { mint: baseMint[0] });
+    const xMint = umi.eddsa.findPda(SOLD_STAKING_PROGRAM_ID, [Buffer.from("mint")])[0];
+    const xMetadata = findMetadataPda(umi, { mint: xMint });
+
+    let txBuilder = new TransactionBuilder();
+
+    if (metadataValues.xmint) {
+      console.log("Updating xMint metadata...");
+
+      if (!poolManager) {
+        throw new Error("Pool Manager is not set");
+      }
+
+      txBuilder = txBuilder.add(
+        updateXmintMetadata(umi, {
+          poolManager: poolManager.publicKey,
+          metadataAccount: xMetadata,
+          owner: umi.identity,
+          name: metadataValues.name,
+          symbol: metadataValues.symbol,
+          uri: metadataValues.uri,
+        })
+      );
+    } else {
+      console.log("Updating normal mint metadata...");
+
+      if (!tokenManager) {
+        throw new Error("Token Manager is not set");
+      }
+
+      txBuilder = txBuilder.add(
+        updateMintMetadata(umi, {
+          tokenManager: tokenManager.publicKey,
+          metadataAccount: baseMetadata,
+          owner: umi.identity,
+          name: metadataValues.name,
+          symbol: metadataValues.symbol,
+          uri: metadataValues.uri,
+        })
+      );
+    }
+
+    console.log("Sending transaction...");
+    const response = await txBuilder.sendAndConfirm(umi, { send: { skipPreflight: true } });
+    console.log("Transaction response:", response);
+
+    toast.success("Metadata update successful");
+    console.log("Updated Metadata:", metadataValues);
+  } catch (error) {
+    console.error("Failed to update metadata:", error);
+    toast.error("Failed to update metadata");
+  } finally {
+    setLoading(false);
+    toast.dismiss();
+    refetch();
+  }
+};
+
+
   return {
     tokenManager,
     poolManager,
@@ -906,6 +978,7 @@ export const useSold = () => {
     handleWithdraw,
     getWithdrawIntiationTime,
     getWithdrawExecutionWindow,
+    handleMetadataUpdate,
     getWithdrawTimeLock,
     handleWithdrawTimeUpdate,
     allowList,

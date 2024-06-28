@@ -3,20 +3,24 @@
 import React, { useState, useRef } from "react";
 import { useSold } from "../../hooks/useSold";
 import { toast } from "sonner";
+import { Spin } from 'antd';
 
 const MetadataUpdateModal = ({ open, setOpen }: any) => {
   const sold = useSold();
   const modalRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState("");
+  const [xMintUpdate, setXMintUpdate] = useState(false);
+
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const [metadataValues, setMetadataValues] = useState({
     name: "",
     symbol: '',
-    uri: ""
+    uri: "",
+    xmint: false
   })
 
-  const [loading, setLoading] = useState(false);
 
   const handleClickOutside = (event: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -24,24 +28,29 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
     }
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
-    setMetadataValues(prev => ({ ...prev, [name]: value }));
+    setMetadataValues((prev) => ({ ...prev, [name]: value }));
     setError(""); // Clear error on new input
   };
 
-  // const handleUpdateClick = async (event: React.FormEvent) => {
-  //   event.preventDefault(); // Prevent form submission
-  //   setLoading(true);
-  //   try {
-  //     // Assuming you have a validation or update function that uses metadataValues
-  //     await sold.handleUpdateMetadata(metadataValues);
-  //     setOpen(false);
-  //   } catch (error) {
-  //     setError("Update failed. Please check the input values.");
-  //   }
-  //   setLoading(false);
-  // };
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    setLoading(true); // Set loading state
+    toast.loading("Updating Metadata...");
+    try {
+      await sold.handleMetadataUpdate(metadataValues);
+      toast.success("Metadata update successful");
+      setOpen(false); // Close the modal
+    } catch (e) {
+      setError("Failed to update metadata");
+      console.error("Error updating metadata:", e);
+      toast.error("Failed to update metadata");
+    } finally {
+      setLoading(false); // Reset loading state
+      toast.dismiss();
+    }
+  };
 
   return (
     <div
@@ -69,39 +78,55 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
           </button>
         </div>
         <div className="w-full flex flex-col items-center justify-center gap-4 mt-4">
-          <form action="" className='w-full flex flex-col items-start justify-start gap-2'>
+          <form
+            onSubmit={handleSubmit}
+            className="w-full flex flex-col items-start justify-start gap-2"
+          >
             <input
               type="text"
               placeholder="Name"
-              value={inputValue}
+              name="name"
+              value={metadataValues.name}
               onChange={handleInputChange}
               className="input w-full bg-transparent"
-            ></input>
+            />
             <input
               type="text"
-              placeholder="symbol"
-              value={inputValue}
+              placeholder="Symbol"
+              name="symbol"
+              value={metadataValues.symbol}
               onChange={handleInputChange}
               className="input w-full bg-transparent"
-            ></input>
+            />
             <input
               type="text"
-              placeholder="uri"
-              value={inputValue}
+              placeholder="URI"
+              name="uri"
+              value={metadataValues.uri}
               onChange={handleInputChange}
               className="input w-full bg-transparent"
-            ></input>
+            />
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                className="toggle"
+                checked={metadataValues.xmint}
+                onChange={() =>
+                  setMetadataValues((prev) => ({
+                    ...prev,
+                    xmint: !prev.xmint,
+                  }))
+                }
+              />
+              <span>xMint</span>
+            </label>
             <div className="w-full flex items-center justify-between gap-4 mt-4">
-              <button type="submit" value="Submit"
-                className="secondaryCTA w-full"
-              //  onClick={handleUpdateClick}
-              >
-                Update
+              <button type="submit" className="secondaryCTA w-full" disabled={loading}>
+                {loading ? <><Spin size='small' /> Updating...</> : "Update"}
               </button>
             </div>
           </form>
           {error && <span className="text-red-500">{error}</span>}
-
         </div>
       </div>
     </div>

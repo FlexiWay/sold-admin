@@ -258,3 +258,43 @@ body::-webkit-scrollbar-thumb {
     radial-gradient(at 85% 28%, #b2abeb 0px, transparent 50%),
     radial-gradient(at 81% 66%, #ccd2e0 0px, transparent 50%);
 }
+
+
+
+/* Add this CSS to your styles */
+.toggle {
+  /* Default styles for toggle */
+  appearance: none;
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+.toggle:checked {
+  /* Styles for when toggle is checked */
+  background-color: #492BFF; /* Green background when active */
+  color:#492BFF
+}
+
+.toggle:before {
+  /* Circle inside the toggle */
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle:checked:before {
+  /* Move circle to the right when toggle is checked */
+  transform: translateX(20px);
+    background-color: #492BFF;
+}

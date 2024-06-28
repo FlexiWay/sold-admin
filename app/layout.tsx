@@ -2,7 +2,6 @@ import { Toaster } from "sonner";
 import "../styles/globals.css";
 import LayoutWrapper from "./LayoutWrapper";
 import NewAppBar from "../components/shared/NewAppBar";
-import Sidebar from "../components/shared/Sidebar";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
 
