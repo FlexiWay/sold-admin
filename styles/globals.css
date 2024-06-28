@@ -126,7 +126,7 @@
 /* Next.js container */
 #__next {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
 }
 
 /* Inherit fonts for inputs and buttons */
@@ -138,12 +138,12 @@ select {
 }
 
 /* Root variables */
-/* :root {
-  --background-color: #121314;
+:root {
+  --background-color: #0F1114;
   --white: #ffffff;
   --tw-color1: #a855f7;
   --tw-color1-hover: #9333ea;
-} */
+}
 
 /* Navigation link styles */
 .navLink {
@@ -162,9 +162,13 @@ select {
     border: 1px solid black !important;
   }
 
+  :root {
+      @apply !bg-[#0F1114]
+  }
+
 /* Body styles */
 body {
-  @apply bg-[#0F1114] bg-center bg-cover bg-no-repeat text-white selection:bg-builderz-blue selection:text-white;
+  @apply bg-[#0F1114]  text-white selection:bg-builderz-blue selection:text-white;
  font-family: 'Roobert TRIAL', sans-serif;
   /* margin: 0; */
   height: calc(100vh);

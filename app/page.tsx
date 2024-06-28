@@ -10,6 +10,16 @@ import { Spin } from "antd";
 import { Logo } from '../components/Logo';
 import MyMultiButton from '../components/layout/MyMultiButton';
 import Image from "next/image";
+import AdminUpdate from '../components/shared/AdminUpdate';
+import { DepositWithdraw } from '../components/shared/DepositWithdraw';
+import GateKeeperUpdate from '../components/shared/GateKeeperUpdate';
+import MetadataUpdate from '../components/shared/MetadataUpdate';
+import OwnerUpdate from '../components/shared/OwnerUpdate';
+import { PauseUnpause } from '../components/shared/PauseUnpause';
+import PoolOwnerUpdate from '../components/shared/PoolOwnerUpdate';
+import WhitelistUpdate from '../components/shared/WhitelistUpdate';
+import { WithdrawTimeUpdate } from '../components/shared/WithdrawTimeUpdate';
+import { YieldUpdate } from '../components/shared/YieldUpdate';
 
 const Index: React.FC = () => {
   const wallet = useWallet();
@@ -51,19 +61,26 @@ const Index: React.FC = () => {
 
   return (
     <>
-      <section className="w-full flex flex-grow h-full flex-col items-center justify-center gap-20">
-
-
-        <div className="w-full flex flex-col items-center justify-center gap-6">
-          {/* first row */}
-          <StatsCards />
+      <div className="w-full flex flex-col items-center justify-center gap-6">
+        {/* first row */}
+        <StatsCards />
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
           {/* second row */}
-          <SecondRow />
+          <DepositWithdraw />
+          <WithdrawTimeUpdate />
+          <YieldUpdate />
           {/* third row */}
-          <ThirdRow />
-          {/* yield update */}
+          <WhitelistUpdate />
+          <GateKeeperUpdate />
+          <PauseUnpause />
+          <AdminUpdate />
+          <OwnerUpdate />
+          <PoolOwnerUpdate />
+          <MetadataUpdate />
         </div>
-      </section>
+
+        {/* yield update */}
+      </div>
     </>
   );
 };

@@ -15,14 +15,10 @@ export default async function RootLayout({ children }: any) {
     <LayoutWrapper>
       <html lang="en">
         <body className="relative">
-          {/* <AppBar /> */}
-          {/* <Sidebar /> */}
-          <div className="">
-            <NewAppBar />
-            <main className="py-10 ">
-              <div className="px-4 sm:px-6 lg:px-8">{children}</div>
-            </main>
-          </div>
+          <NewAppBar />
+          <main className="py-10 ">
+            <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+          </main>
           {/* <Footer /> */}
           <Toaster position="bottom-right" theme="dark" />
         </body>
