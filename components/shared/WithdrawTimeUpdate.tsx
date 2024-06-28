@@ -20,9 +20,7 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
         <span className="text-xl font-black -mt-2">Withdraw Time</span>
         <div className="w-full relative flex items-center justify-start">
           <div className="absolute top-1/2 -translate-y-1/2 left-4 opacity-50 flex flex-col items-start justify-start">
-            <span className="font-bold text-[14px]">
-              s
-            </span>
+            <span className="font-bold text-[14px]">s</span>
           </div>
           <input
             type="number"

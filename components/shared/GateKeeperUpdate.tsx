@@ -7,7 +7,9 @@ import { PublicKey } from "@solana/web3.js";
 const GateKeeperModal = ({ open, setOpen }: any) => {
   const sold = useSold();
   const modalRef = useRef<HTMLDivElement>(null);
-  const [textareaValue, setTextareaValue] = useState(JSON.stringify(sold.gateKeepers, null, 1),);
+  const [textareaValue, setTextareaValue] = useState(
+    JSON.stringify(sold.gateKeepers, null, 1),
+  );
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -130,7 +132,8 @@ export default function GateKeeperUpdate() {
             </div> */}
             <button
               className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
-              onClick={() => setOpen(true)}>
+              onClick={() => setOpen(true)}
+            >
               Update
             </button>
           </div>

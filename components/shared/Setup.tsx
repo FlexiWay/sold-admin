@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { SetupOptions } from "@builderz/sold";
 import React, { useState } from "react";
@@ -14,7 +14,8 @@ const Setup: React.FC = () => {
       "https://shdw-drive.genesysgo.net/4d35gSa4Z8WHF265V196rhdgdZ6jFzpLULmeczQUjG5t/pusd_metadata.json",
     xMintName: "sPUSD",
     xMintSymbol: "sPUSD",
-    xMintUri: "https://shdw-drive.genesysgo.net/4d35gSa4Z8WHF265V196rhdgdZ6jFzpLULmeczQUjG5t/spusd_metadata.json",
+    xMintUri:
+      "https://shdw-drive.genesysgo.net/4d35gSa4Z8WHF265V196rhdgdZ6jFzpLULmeczQUjG5t/spusd_metadata.json",
     baseMintDecimals: 6,
     xMintDecimals: 6,
     quoteMint: "",

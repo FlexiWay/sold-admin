@@ -3,7 +3,7 @@
 import React, { useState, useRef } from "react";
 import { useSold } from "../../hooks/useSold";
 import { toast } from "sonner";
-import { Spin } from 'antd';
+import { Spin } from "antd";
 
 const MetadataUpdateModal = ({ open, setOpen }: any) => {
   const sold = useSold();
@@ -16,11 +16,10 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
 
   const [metadataValues, setMetadataValues] = useState({
     name: "",
-    symbol: '',
+    symbol: "",
     uri: "",
-    xmint: false
-  })
-
+    xmint: false,
+  });
 
   const handleClickOutside = (event: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -28,13 +27,13 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
     }
   };
 
-  const handleInputChange = (event: { target: { name: any; value: any; }; }) => {
+  const handleInputChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target;
     setMetadataValues((prev) => ({ ...prev, [name]: value }));
     setError(""); // Clear error on new input
   };
 
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault(); // Prevent default form submission behavior
     setLoading(true); // Set loading state
     toast.loading("Updating Metadata...");
@@ -76,7 +75,6 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
               />
             </svg>
           </button>
-
         </div>
         <div className="w-full flex flex-col items-center justify-center gap-4 mt-4">
           <form
@@ -127,7 +125,13 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
                 className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-brand-first ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
                 disabled={loading}
               >
-                {loading ? <><Spin size='small' /> Updating...</> : "Update"}
+                {loading ? (
+                  <>
+                    <Spin size="small" /> Updating...
+                  </>
+                ) : (
+                  "Update"
+                )}
               </button>
             </div>
           </form>
@@ -164,18 +168,17 @@ export default function MetadataUpdate() {
         </div> */}
         <div className="w-full max-w-md mx-auto">
           <div className="w-full flex items-center justify-between gap-4 mt-4">
-
             <button
               className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
-              onClick={() => setOpen(true)}>
+              onClick={() => setOpen(true)}
+            >
               Update Metdata
             </button>
           </div>
         </div>
-      </div >
+      </div>
 
-      {open && <MetadataUpdateModal open={open} setOpen={setOpen} />
-      }
+      {open && <MetadataUpdateModal open={open} setOpen={setOpen} />}
     </>
   );
 }

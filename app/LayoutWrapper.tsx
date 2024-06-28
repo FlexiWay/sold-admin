@@ -19,9 +19,9 @@ type LayoutWrapperProps = {
 const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
   return (
     <SoldStateProvider>
-    <ContextProvider>
-      <ThemeProvider>{children}</ThemeProvider>
-    </ContextProvider>
+      <ContextProvider>
+        <ThemeProvider>{children}</ThemeProvider>
+      </ContextProvider>
     </SoldStateProvider>
   );
 };

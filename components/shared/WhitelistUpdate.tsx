@@ -5,7 +5,6 @@ import { useSold } from "../../hooks/useSold";
 import { PublicKey } from "@solana/web3.js";
 import { Spin } from "antd";
 
-
 const UpdateModal = ({ open, setOpen }: any) => {
   const sold = useSold();
   const [error, setError] = useState("");
@@ -109,7 +108,12 @@ const UpdateModal = ({ open, setOpen }: any) => {
             ></textarea>
             {error && <span className="text-red-500">{error}</span>}
             <div className="w-full flex items-center justify-between gap-4 mt-4">
-              <button className="secondaryCTA w-full" onClick={handleUpdateClick}>Update</button>
+              <button
+                className="secondaryCTA w-full"
+                onClick={handleUpdateClick}
+              >
+                Update
+              </button>
               {/* <button className='secondaryCTA'>Reset</button> */}
             </div>
           </div>
@@ -131,12 +135,14 @@ export default function WhitelistUpdate() {
         </div>
         <div className="w-full">
           <div className="w-full flex items-center justify-center gap-4">
-            {sold.listFetched && <button
-              className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
-              onClick={() => setOpen(true)}>
-              Update
-            </button>
-            }
+            {sold.listFetched && (
+              <button
+                className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
+                onClick={() => setOpen(true)}
+              >
+                Update
+              </button>
+            )}
             {!sold.listFetched && <Spin />}
           </div>
         </div>

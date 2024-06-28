@@ -106,15 +106,17 @@ export default function OwnerUpdate() {
 
   const getPendingOwnerPubKey = () => {
     if (sold.tokenManager)
-      return (new PublicKey(sold.tokenManager.pendingOwner).toBase58()) || "";
-  }
+      return new PublicKey(sold.tokenManager.pendingOwner).toBase58() || "";
+  };
 
   const isValidPublicKey = (key: string): boolean => {
     try {
       if (key != "11111111111111111111111111111111") {
         new PublicKey(key);
         return true;
-      } else { return false; }
+      } else {
+        return false;
+      }
     } catch (error) {
       return false;
     }
@@ -124,12 +126,19 @@ export default function OwnerUpdate() {
     <>
       <div className="w-full flex flex-col items-center justify-center gap-2 p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
         <div className="w-full flex items-center justify-start">
-          <span className="text-xl font-black -mt-2">Issuance Owner {isValidPublicKey(sold.tokenManager?.pendingOwner || "0") ? "(pending)" : ""}</span>
+          <span className="text-xl font-black -mt-2">
+            Issuance Owner{" "}
+            {isValidPublicKey(sold.tokenManager?.pendingOwner || "0")
+              ? "(pending)"
+              : ""}
+          </span>
         </div>
         <div className="w-full max-w-md mx-auto">
           <div className="w-full flex items-center justify-between gap-4 mt-4">
             <span className="text-xs text-white truncate w-3/4">
-              {isValidPublicKey(sold.tokenManager?.pendingOwner || "0") ? getPendingOwnerPubKey() || sold.owner?.toBase58() : sold.owner?.toBase58()}
+              {isValidPublicKey(sold.tokenManager?.pendingOwner || "0")
+                ? getPendingOwnerPubKey() || sold.owner?.toBase58()
+                : sold.owner?.toBase58()}
             </span>
             <button className="btn btn-sm" onClick={() => setOpen(true)}>
               <svg
@@ -147,9 +156,14 @@ export default function OwnerUpdate() {
                 />
               </svg>
             </button>
-            {isPendingOwner && <button className="btn btn-sm" onClick={() => sold.handleAcceptUpdateOwner()}>
-              ACCEPT
-            </button>}
+            {isPendingOwner && (
+              <button
+                className="btn btn-sm"
+                onClick={() => sold.handleAcceptUpdateOwner()}
+              >
+                ACCEPT
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -8,20 +8,26 @@ const cardTitles = [
 ];
 
 const StatCard = ({ title, number, img }: any) => {
-  const formattedNumber = number != null // Check if number is not null or undefined
-    ? title === "Total USDC in pool"
-      ? `$ ${number.toLocaleString()}`
-      : `${number.toLocaleString()}`
-    : 'N/A'; // Default text if number is undefined
-
+  const formattedNumber =
+    number != null // Check if number is not null or undefined
+      ? title === "Total USDC in pool"
+        ? `$ ${number.toLocaleString()}`
+        : `${number.toLocaleString()}`
+      : "N/A"; // Default text if number is undefined
 
   return (
     <>
       <div className="w-full flex flex-col items-center justify-center gap-2 p-8  bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
         <span className="opacity-60 text-xs">{title}</span>
         <div className="w-full flex items-center justify-center gap-3">
-          <img src={img} alt={title} className='rounded-full object-center w-8 h-8' />
-          <span className="text-[24px] font-black -mt-1 leading-8">{formattedNumber}</span>
+          <img
+            src={img}
+            alt={title}
+            className="rounded-full object-center w-8 h-8"
+          />
+          <span className="text-[24px] font-black -mt-1 leading-8">
+            {formattedNumber}
+          </span>
         </div>
       </div>
     </>

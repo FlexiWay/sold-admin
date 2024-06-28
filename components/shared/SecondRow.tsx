@@ -1,4 +1,3 @@
-
 import React from "react";
 import { DepositWithdraw } from "./DepositWithdraw";
 import { YieldUpdate } from "./YieldUpdate";

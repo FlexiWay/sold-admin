@@ -2,114 +2,124 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-SemiBoldItalic.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-SemiBoldItalic.woff') format('woff');
-    font-weight: 600;
-    font-style: italic;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-SemiBoldItalic.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-SemiBoldItalic.woff") format("woff");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-Bold.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-Bold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-Bold.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-Light.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-Light.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-Light.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-RegularItalic.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-RegularItalic.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-RegularItalic.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-RegularItalic.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-SemiBold.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-SemiBold.woff') format('woff');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-SemiBold.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-MediumItalic.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-MediumItalic.woff') format('woff');
-    font-weight: 500;
-    font-style: italic;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-MediumItalic.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-MediumItalic.woff") format("woff");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-Medium.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-Medium.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-Medium.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-Regular.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-Regular.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-LightItalic.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-LightItalic.woff') format('woff');
-    font-weight: 300;
-    font-style: italic;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-LightItalic.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-LightItalic.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-HeavyItalic.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-HeavyItalic.woff') format('woff');
-    font-weight: 900;
-    font-style: italic;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-HeavyItalic.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-HeavyItalic.woff") format("woff");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-Heavy.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-Heavy.woff') format('woff');
-    font-weight: 900;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-Heavy.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-Heavy.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Roobert TRIAL';
-    src: url('/fonts/RoobertTRIAL-BoldItalic.woff2') format('woff2'),
-        url('/fonts/RoobertTRIAL-BoldItalic.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
-    font-display: swap;
+  font-family: "Roobert TRIAL";
+  src:
+    url("/fonts/RoobertTRIAL-BoldItalic.woff2") format("woff2"),
+    url("/fonts/RoobertTRIAL-BoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
 }
-
-
 
 /* Include Tailwind CSS */
 @tailwind base;
@@ -139,7 +149,7 @@ select {
 
 /* Root variables */
 :root {
-  --background-color: #0F1114;
+  --background-color: #0f1114;
   --white: #ffffff;
   --tw-color1: #a855f7;
   --tw-color1-hover: #9333ea;
@@ -156,20 +166,20 @@ select {
 }
 
 /* Custom Wallet Button */
-  .mymultibutton,
-  .wallet-adapter-button {
-    @apply  text-white  hover:bg-opacity-80 flex items-center justify-center break-before-avoid !important;
-    border: 1px solid black !important;
-  }
+.mymultibutton,
+.wallet-adapter-button {
+  @apply text-white  hover:bg-opacity-80 flex items-center justify-center break-before-avoid !important;
+  border: 1px solid black !important;
+}
 
-  :root {
-      @apply !bg-[#0F1114]
-  }
+:root {
+  @apply !bg-[#0F1114];
+}
 
 /* Body styles */
 body {
   @apply bg-[#0F1114]  text-white selection:bg-builderz-blue selection:text-white;
- font-family: 'Roobert TRIAL', sans-serif;
+  font-family: "Roobert TRIAL", sans-serif;
   /* margin: 0; */
   height: calc(100vh);
   /* Fluid Fonts */
@@ -263,8 +273,6 @@ body::-webkit-scrollbar-thumb {
     radial-gradient(at 81% 66%, #ccd2e0 0px, transparent 50%);
 }
 
-
-
 /* Add this CSS to your styles */
 .toggle {
   /* Default styles for toggle */
@@ -280,8 +288,8 @@ body::-webkit-scrollbar-thumb {
 
 .toggle:checked {
   /* Styles for when toggle is checked */
-  background-color: #492BFF; /* Green background when active */
-  color:#492BFF
+  background-color: #492bff; /* Green background when active */
+  color: #492bff;
 }
 
 .toggle:before {
@@ -300,5 +308,5 @@ body::-webkit-scrollbar-thumb {
 .toggle:checked:before {
   /* Move circle to the right when toggle is checked */
   transform: translateX(20px);
-    background-color: #492BFF;
+  background-color: #492bff;
 }

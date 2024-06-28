@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
-import { TokenManager, PoolManager } from '@builderz/sold';
+import { TokenManager, PoolManager } from "@builderz/sold";
 
 interface SoldStateContextType {
   tokenManager: TokenManager | null;
@@ -26,13 +26,15 @@ interface SoldStateContextType {
     xSoldSupply: number;
     [key: string]: number;
   };
-  setStatCardData: React.Dispatch<React.SetStateAction<{
-    totalSupply: number;
-    usdcInPool: number;
-    totalStaked: number;
-    xSoldSupply: number;
-    [key: string]: number;
-  }>>;
+  setStatCardData: React.Dispatch<
+    React.SetStateAction<{
+      totalSupply: number;
+      usdcInPool: number;
+      totalStaked: number;
+      xSoldSupply: number;
+      [key: string]: number;
+    }>
+  >;
 
   listFetched: boolean;
   setListFetched: React.Dispatch<React.SetStateAction<boolean>>;
@@ -66,15 +68,24 @@ export const SoldStateProvider = ({ children }: any) => {
   return (
     <SoldStateContext.Provider
       value={{
-        tokenManager, setTokenManager,
-        listFetched, setListFetched,
-        poolManager, setPoolManager,
-        owner, setOwner,
-        admin, setAdmin,
-        gateKeepers, setGateKeepers,
-        allowList, setAllowList,
-        reset, setReset,
-        statCardData, setStatCardData,
+        tokenManager,
+        setTokenManager,
+        listFetched,
+        setListFetched,
+        poolManager,
+        setPoolManager,
+        owner,
+        setOwner,
+        admin,
+        setAdmin,
+        gateKeepers,
+        setGateKeepers,
+        allowList,
+        setAllowList,
+        reset,
+        setReset,
+        statCardData,
+        setStatCardData,
       }}
     >
       {children}
@@ -85,7 +96,9 @@ export const SoldStateProvider = ({ children }: any) => {
 export const useSoldStateContext = () => {
   const context = useContext(SoldStateContext);
   if (context === null) {
-    throw new Error('useSoldStateContext must be used within a SoldStateProvider');
+    throw new Error(
+      "useSoldStateContext must be used within a SoldStateProvider",
+    );
   }
   return context;
 };

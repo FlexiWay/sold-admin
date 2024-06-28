@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useEffect } from "react";
 import { useSold } from "../../hooks/useSold";
@@ -90,14 +90,10 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
           onFocus={(e) => e.target.value === "0" && (e.target.value = "")}
         />
         <span className="pr-10 absolute right-0 z-0 top-1/2 -translate-y-[55%] text-[14px] opacity-100 flex flex-col items-end justify-center -gap-0 pointer-events-none">
-          <span className="text-[20px] text-white">
-            {inputValue}
-          </span>
+          <span className="text-[20px] text-white">{inputValue}</span>
         </span>
         <div className="absolute top-1/2 -translate-y-1/2 left-12  z-0 pointer-events-none flex flex-col items-start justify-start">
-          <span className="font-bold uppercase text-[18px]">
-            USDC
-          </span>
+          <span className="font-bold uppercase text-[18px]">USDC</span>
         </div>
       </div>
       <div className="w-full flex items-center justify-between gap-4 mt-4">
@@ -109,7 +105,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
           Deposit
         </button>
         {(sold.tokenManager?.pendingWithdrawalAmount || 0 > 0) &&
-          !withdrawExpired ? (
+        !withdrawExpired ? (
           !isExecuteWindow ? (
             <div className="w-1/2 flex items-center justify-center gap-1 flex-col">
               <button

@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
 import { useWallet } from "@solana/wallet-adapter-react";
 import StatsCards from "../components/shared/StatsCards";
 import { useSold } from "../hooks/useSold";
 import Setup from "../components/shared/Setup";
 import { Spin } from "antd";
-import MyMultiButton from '../components/layout/MyMultiButton';
+import MyMultiButton from "../components/layout/MyMultiButton";
 import Image from "next/image";
-import AdminUpdate from '../components/shared/AdminUpdate';
-import { DepositWithdraw } from '../components/shared/DepositWithdraw';
-import GateKeeperUpdate from '../components/shared/GateKeeperUpdate';
-import MetadataUpdate from '../components/shared/MetadataUpdate';
-import OwnerUpdate from '../components/shared/OwnerUpdate';
-import { PauseUnpause } from '../components/shared/PauseUnpause';
-import PoolOwnerUpdate from '../components/shared/PoolOwnerUpdate';
-import WhitelistUpdate from '../components/shared/WhitelistUpdate';
-import { WithdrawTimeUpdate } from '../components/shared/WithdrawTimeUpdate';
-import { YieldUpdate } from '../components/shared/YieldUpdate';
+import AdminUpdate from "../components/shared/AdminUpdate";
+import { DepositWithdraw } from "../components/shared/DepositWithdraw";
+import GateKeeperUpdate from "../components/shared/GateKeeperUpdate";
+import MetadataUpdate from "../components/shared/MetadataUpdate";
+import OwnerUpdate from "../components/shared/OwnerUpdate";
+import { PauseUnpause } from "../components/shared/PauseUnpause";
+import PoolOwnerUpdate from "../components/shared/PoolOwnerUpdate";
+import WhitelistUpdate from "../components/shared/WhitelistUpdate";
+import { WithdrawTimeUpdate } from "../components/shared/WithdrawTimeUpdate";
+import { YieldUpdate } from "../components/shared/YieldUpdate";
 
 const Index: React.FC = () => {
   const wallet = useWallet();
@@ -31,7 +31,8 @@ const Index: React.FC = () => {
           height={140}
           alt=""
           className="w-3/4 md:w-2/4 lg:w-1/4"
-        />        <h1>Please connect your wallet</h1>
+        />{" "}
+        <h1>Please connect your wallet</h1>
         <MyMultiButton />
       </div>
     );
