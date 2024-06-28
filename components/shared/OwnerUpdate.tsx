@@ -27,7 +27,6 @@ const OwnerUpdateModal = ({ open, setOpen }: any) => {
     setLoading(true);
     try {
       if (inputValue.trim()) {
-        //await sold.handleUpdateOwner(inputValue.trim());
         await sold.handleInitiateOwner(inputValue.trim());
         setOpen(false);
       } else {

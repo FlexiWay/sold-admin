@@ -1,4 +1,5 @@
 "use client"
+
 import React, { createContext, useContext, useState } from 'react';
 import { PublicKey } from "@solana/web3.js";
 import { TokenManager, PoolManager } from '@builderz/sold';
@@ -39,7 +40,7 @@ interface SoldStateContextType {
 
 const SoldStateContext = createContext<SoldStateContextType | null>(null);
 
-export const SoldStateProvider = ({ children }:any) => {
+export const SoldStateProvider = ({ children }: any) => {
   const [tokenManager, setTokenManager] = useState<TokenManager | null>(null);
   const [poolManager, setPoolManager] = useState<PoolManager | null>(null);
   const [owner, setOwner] = useState<PublicKey | null>(null);
@@ -66,7 +67,7 @@ export const SoldStateProvider = ({ children }:any) => {
     <SoldStateContext.Provider
       value={{
         tokenManager, setTokenManager,
-        listFetched,setListFetched,
+        listFetched, setListFetched,
         poolManager, setPoolManager,
         owner, setOwner,
         admin, setAdmin,

@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useSold } from "../../hooks/useSold";
-import { toast } from "sonner";
 import { PublicKey } from "@solana/web3.js";
 
 const GateKeeperModal = ({ open, setOpen }: any) => {
@@ -25,7 +24,7 @@ const GateKeeperModal = ({ open, setOpen }: any) => {
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setTextareaValue(event.target.value);
-    setError(""); // Clear error on new input
+    setError("");
   };
 
   const isValidPublicKey = (key: string): boolean => {

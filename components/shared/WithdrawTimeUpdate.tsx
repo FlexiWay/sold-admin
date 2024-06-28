@@ -9,7 +9,7 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
   const handleInputChange = (event: { target: { value: string } }) => {
     const value = event.target.value;
     const numValue = parseInt(value, 10);
-    if (!isNaN(numValue) && numValue >=0) {
+    if (!isNaN(numValue) && numValue >= 0) {
       setInputValue(numValue);
     }
   };
@@ -27,8 +27,8 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
           <input
             type="number"
             //placeholder="0"
-            className="input input-bordered w-full bg-transparent !text-transparent"
-            //value={inputValue}
+            className="input input-bordered w-full bg-transparent !text-transparent text-end"
+            value={inputValue}
             onChange={handleInputChange}
             onFocus={(e) => e.target.value === "0" && (e.target.value = "")}
           />

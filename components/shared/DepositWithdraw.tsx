@@ -1,7 +1,8 @@
+'use client'
+
 import React, { useEffect } from "react";
 import { useSold } from "../../hooks/useSold";
 import CountdownTimer from "./CountDownTimer";
-import { CompassOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import Image from "next/image";
 
@@ -21,7 +22,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
   const handleInputChange = (event: { target: { value: string } }) => {
     const value = event.target.value;
     const numValue = parseInt(value, 10);
-    if (!isNaN(numValue) && numValue >=0) {
+    if (!isNaN(numValue) && numValue >= 0) {
       setInputValue(numValue);
     }
   };
@@ -92,7 +93,6 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
           <span className="text-[20px] text-white">
             {inputValue}
           </span>
-          {/* <span className="text-xs opacity-50">${inputValue}</span> */}
         </span>
         <div className="absolute top-1/2 -translate-y-1/2 left-12  z-0 pointer-events-none flex flex-col items-start justify-start">
           <span className="font-bold uppercase text-[18px]">

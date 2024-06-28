@@ -1,9 +1,10 @@
+'use client'
+
 import React, { useState, useRef } from "react";
 import { useSold } from "../../hooks/useSold";
-import { toast } from "sonner";
 import { Spin } from "antd";
 
-const AdminUpdateModal = ({ open, setOpen }: any) => {
+const AdminUpdateModal = ({ setOpen }: any) => {
   const sold = useSold();
   const modalRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState("");
@@ -19,7 +20,7 @@ const AdminUpdateModal = ({ open, setOpen }: any) => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
-    setError(""); // Clear error on new input
+    setError("");
   };
 
   const handleUpdateClick = async () => {
@@ -117,7 +118,7 @@ export default function AdminUpdate() {
         </div>
       </div>
 
-      {open && <AdminUpdateModal open={open} setOpen={setOpen} />}
+      {open && <AdminUpdateModal setOpen={setOpen} />}
     </>
   );
 }

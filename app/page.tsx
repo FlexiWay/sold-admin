@@ -1,13 +1,10 @@
-"use client";
+"use client"
 
 import { useWallet } from "@solana/wallet-adapter-react";
-import SecondRow from "../components/shared/SecondRow";
 import StatsCards from "../components/shared/StatsCards";
-import ThirdRow from "../components/shared/ThirdRow";
 import { useSold } from "../hooks/useSold";
 import Setup from "../components/shared/Setup";
 import { Spin } from "antd";
-import { Logo } from '../components/Logo';
 import MyMultiButton from '../components/layout/MyMultiButton';
 import Image from "next/image";
 import AdminUpdate from '../components/shared/AdminUpdate';
@@ -24,9 +21,7 @@ import { YieldUpdate } from '../components/shared/YieldUpdate';
 const Index: React.FC = () => {
   const wallet = useWallet();
   const sold = useSold();
-  const { loading } = sold;
 
-  // TODO: Wallet Check
   if (!wallet.connected) {
     return (
       <div className="flex flex-col gap-8 items-center justify-center mt-10">
@@ -65,11 +60,9 @@ const Index: React.FC = () => {
         {/* first row */}
         <StatsCards />
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-          {/* second row */}
           <DepositWithdraw />
           <WithdrawTimeUpdate />
           <YieldUpdate />
-          {/* third row */}
           <WhitelistUpdate />
           <GateKeeperUpdate />
           <PauseUnpause />
@@ -78,8 +71,6 @@ const Index: React.FC = () => {
           <PoolOwnerUpdate />
           <MetadataUpdate />
         </div>
-
-        {/* yield update */}
       </div>
     </>
   );
