@@ -10,6 +10,12 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
 
+  const [metadataValues, setMetadataValues] = useState({
+    name: "",
+    symbol: '',
+    uri: ""
+  })
+
   const [loading, setLoading] = useState(false);
 
   const handleClickOutside = (event: React.MouseEvent) => {
@@ -19,21 +25,20 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+    const { name, value } = event.target;
+    setMetadataValues(prev => ({ ...prev, [name]: value }));
     setError(""); // Clear error on new input
   };
 
-  // const handleUpdateClick = async () => {
+  // const handleUpdateClick = async (event: React.FormEvent) => {
+  //   event.preventDefault(); // Prevent form submission
   //   setLoading(true);
   //   try {
-  //     if (inputValue.trim()) {
-  //       await sold.handleUpdateOwner(inputValue.trim());
-  //       setOpen(false);
-  //     } else {
-  //       throw new Error("Invalid input");
-  //     }
+  //     // Assuming you have a validation or update function that uses metadataValues
+  //     await sold.handleUpdateMetadata(metadataValues);
+  //     setOpen(false);
   //   } catch (error) {
-  //     setError("Invalid input. Please enter a valid public key.");
+  //     setError("Update failed. Please check the input values.");
   //   }
   //   setLoading(false);
   // };
@@ -70,21 +75,21 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
               placeholder="Name"
               value={inputValue}
               onChange={handleInputChange}
-              className="input w-full"
+              className="input w-full bg-transparent"
             ></input>
             <input
-              type="file"
-              name="file"
-              id="file"
-              className="input w-full flex items-center justify-center bg-transparent -ml-4 mt-3"
-              accept=".json"
+              type="text"
+              placeholder="symbol"
+              value={inputValue}
+              onChange={handleInputChange}
+              className="input w-full bg-transparent"
             ></input>
             <input
               type="text"
               placeholder="uri"
               value={inputValue}
               onChange={handleInputChange}
-              className="input w-full"
+              className="input w-full bg-transparent"
             ></input>
             <div className="w-full flex items-center justify-between gap-4 mt-4">
               <button type="submit" value="Submit"
@@ -93,7 +98,8 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
               >
                 Update
               </button>
-            </div>          </form>
+            </div>
+          </form>
           {error && <span className="text-red-500">{error}</span>}
 
         </div>
