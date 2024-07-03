@@ -127,7 +127,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
               <button
                 className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
                 onClick={() => sold.handleWithdraw(inputValue)}
-                disabled={withdrawExpired || inputValue <= 0 || sold.loading}
+                disabled={withdrawExpired || sold.loading}
               >
                 {sold.loading ? <Spin size="small" /> : "Withdraw"}
               </button>
