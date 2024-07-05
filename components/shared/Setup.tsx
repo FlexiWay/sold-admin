@@ -22,8 +22,7 @@ const Setup: React.FC = () => {
     exchangeRate: 1 * 10 ** 6, // Has to include quoteMintDecimals
     stakingInitialExchangeRate: 1 * 10 ** 6, // Has to include quoteMintDecimals
     emergencyFundBasisPoints: 1000,
-    mintLimitPerSlot: 1000,
-    redemptionLimitPerSlot: 1000,
+    limitPerSlot: 100000 * 10 ** 6,
     allowList: [],
     withdrawTimeLock: 3600,
     withdrawExecutionWindow: 3600,
@@ -219,21 +218,11 @@ const Setup: React.FC = () => {
             </div>
           </label>
           <label className="flex flex-col gap-2 items-start justify-start">
-            Mint Limit Per Slot
+            Limit Per Slot
             <input
               type="number"
-              name="mintLimitPerSlot"
-              value={setupOptions.mintLimitPerSlot}
-              onChange={handleInputChange}
-              className="input input-bordered w-full bg-transparent"
-            />
-          </label>
-          <label className="flex flex-col gap-2 items-start justify-start">
-            Redemption Limit Per Slot
-            <input
-              type="number"
-              name="redemptionLimitPerSlot"
-              value={setupOptions.redemptionLimitPerSlot}
+              name="limitPerSlot"
+              value={setupOptions.limitPerSlot}
               onChange={handleInputChange}
               className="input input-bordered w-full bg-transparent"
             />

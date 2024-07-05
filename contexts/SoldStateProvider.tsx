@@ -3,12 +3,17 @@
 import React, { createContext, useContext, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { TokenManager, PoolManager } from "@builderz/sold";
+import { Mint } from "@metaplex-foundation/mpl-toolbox"
 
 interface SoldStateContextType {
   tokenManager: TokenManager | null;
   setTokenManager: React.Dispatch<React.SetStateAction<TokenManager | null>>;
   poolManager: PoolManager | null;
   setPoolManager: React.Dispatch<React.SetStateAction<PoolManager | null>>;
+  pusdAccount: Mint | null;
+  setPusdAccount: React.Dispatch<React.SetStateAction<Mint | null>>;
+  spusdAccount: Mint | null;
+  setSpusdAccount: React.Dispatch<React.SetStateAction<Mint | null>>;
   owner: PublicKey | null;
   setOwner: React.Dispatch<React.SetStateAction<PublicKey | null>>;
   admin: PublicKey | null;
@@ -45,6 +50,8 @@ const SoldStateContext = createContext<SoldStateContextType | null>(null);
 export const SoldStateProvider = ({ children }: any) => {
   const [tokenManager, setTokenManager] = useState<TokenManager | null>(null);
   const [poolManager, setPoolManager] = useState<PoolManager | null>(null);
+  const [pusdAccount, setPusdAccount] = useState<Mint | null>(null);
+  const [spusdAccount, setSpusdAccount] = useState<Mint | null>(null);
   const [owner, setOwner] = useState<PublicKey | null>(null);
   const [admin, setAdmin] = useState<PublicKey | null>(null);
   const [gateKeepers, setGateKeepers] = useState<PublicKey[]>([]);
@@ -70,6 +77,10 @@ export const SoldStateProvider = ({ children }: any) => {
       value={{
         tokenManager,
         setTokenManager,
+        pusdAccount,
+        setPusdAccount,
+        spusdAccount,
+        setSpusdAccount,
         listFetched,
         setListFetched,
         poolManager,

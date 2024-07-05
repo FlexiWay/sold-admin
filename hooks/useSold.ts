@@ -26,6 +26,12 @@ import {
   updatePoolOwner,
   updateXmintMetadata,
   updateMintMetadata,
+  fetchTokenManager,
+  fetchPoolManager,
+  fetchAllGatekeeper,
+  findGatekeeperPda,
+  getGatekeeperGpaBuilder,
+  deserializeGatekeeper,
 } from "@builderz/sold";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
@@ -35,6 +41,7 @@ import {
   createSplAssociatedTokenProgram,
   createSplTokenProgram,
   SPL_ASSOCIATED_TOKEN_PROGRAM_ID,
+  fetchMint
 } from "@metaplex-foundation/mpl-toolbox";
 import { toast } from "sonner";
 import { TransactionBuilder, Umi, some, none } from "@metaplex-foundation/umi";
@@ -71,6 +78,10 @@ export const useSold = () => {
     setTokenManager,
     poolManager,
     setPoolManager,
+    pusdAccount,
+    setPusdAccount,
+    spusdAccount,
+    setSpusdAccount,
     owner,
     setOwner,
     admin,
@@ -103,90 +114,84 @@ export const useSold = () => {
     const fetchState = async () => {
       setLoading(true);
 
-      const tokenManagerAcc = await safeFetchTokenManager(
-        umi,
-        tokenManagerPubKey,
-      );
-      const poolManagerAcc = await safeFetchPoolManager(umi, poolManagerPubKey);
-
-      setTokenManager(tokenManagerAcc);
-      setPoolManager(poolManagerAcc);
-
-      console.log("Token Manager: ", tokenManagerAcc);
-      console.log("Pool Manager : ", poolManagerAcc);
-
-      // Calculate exchange rate if poolManager is available
-      if (poolManagerAcc) {
-        const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
-        const lastYieldChangeTimestamp = Number(
-          poolManagerAcc.lastYieldChangeTimestamp,
-        ); // Convert bigint to number
-        const lastYieldChangeExchangeRate = Number(
-          poolManagerAcc.lastYieldChangeExchangeRate,
-        ); // Convert bigint to number
-        const rate = calculateExchangeRate(
-          lastYieldChangeTimestamp,
-          currentTimestamp,
-          Number(poolManagerAcc.annualYieldRate), // Convert bigint to number
-          lastYieldChangeExchangeRate,
+      try {
+        const tokenManagerAcc = await fetchTokenManager(
+          umi,
+          tokenManagerPubKey,
         );
-        setExchangeRate(rate);
+        const poolManagerAcc = await fetchPoolManager(umi, poolManagerPubKey);
+        const pusdAccount = await fetchMint(umi, tokenManagerAcc.mint);
+        const spusdAccount = await fetchMint(umi, poolManagerAcc.xMint);
+
+        console.log(tokenManagerAcc);
+        console.log(poolManagerAcc);
+        console.log(pusdAccount);
+        console.log(spusdAccount);
+
+        setTokenManager(tokenManagerAcc);
+        setPoolManager(poolManagerAcc);
+        setOwner(new PublicKey(tokenManagerAcc.owner));
+        setAdmin(new PublicKey(tokenManagerAcc.admin));
+
+        const gateKeepers = await getGatekeeperGpaBuilder(umi).get();
+        const gateKeepersAcc = gateKeepers.map((gatekeeper) => deserializeGatekeeper(gatekeeper));
+        console.log("Gatekeeprs: ", gateKeepersAcc);
+
+        setGateKeepers(
+          gateKeepersAcc.map((gatekeeper) => new PublicKey(gatekeeper.wallet)),
+        );
+
+        // Calculate exchange rate if poolManager is available
+        if (poolManagerAcc) {
+          const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
+          const lastYieldChangeTimestamp = Number(
+            poolManagerAcc.lastYieldChangeTimestamp,
+          ); // Convert bigint to number
+          const lastYieldChangeExchangeRate = Number(
+            poolManagerAcc.lastYieldChangeExchangeRate,
+          ); // Convert bigint to number
+          const rate = calculateExchangeRate(
+            lastYieldChangeTimestamp,
+            currentTimestamp,
+            Number(poolManagerAcc.annualYieldRate), // Convert bigint to number
+            lastYieldChangeExchangeRate,
+          );
+          setExchangeRate(rate);
+        }
+
+        // Stat stat cards
+        tokenManagerAcc && poolManager && pusdAccount &&
+          setStatCardData({
+            totalSupply: bigIntToFloat(
+              pusdAccount.supply,
+              pusdAccount.decimals,
+            ),
+            usdcInPool: bigIntToFloat(
+              tokenManagerAcc.totalCollateral,
+              tokenManagerAcc.quoteMintDecimals,
+            ),
+            totalStaked: bigIntToFloat(
+              poolManager.baseBalance,
+              tokenManagerAcc.mintDecimals,
+            ),
+            xSoldSupply: bigIntToFloat(
+              spusdAccount.supply,
+              spusdAccount.decimals,
+            ),
+          });
+
+      } catch (error) {
+        console.error("Failed to fetch state:", error);
+        toast.error("Failed to fetch state");
+      } finally {
+        setLoading(false);
       }
-
-      // Stat stat cards
-      tokenManagerAcc &&
-        poolManagerAcc &&
-        setStatCardData({
-          totalSupply: bigIntToFloat(
-            tokenManagerAcc.totalSupply,
-            tokenManagerAcc.mintDecimals,
-          ),
-          usdcInPool: bigIntToFloat(
-            tokenManagerAcc.totalCollateral,
-            tokenManagerAcc.quoteMintDecimals,
-          ),
-          totalStaked: bigIntToFloat(
-            poolManagerAcc.baseBalance,
-            poolManagerAcc.baseMintDecimals,
-          ),
-          xSoldSupply: bigIntToFloat(
-            poolManagerAcc.xSupply,
-            poolManagerAcc.xMintDecimals,
-          ),
-        });
-
-      setLoading(false);
     };
 
     if (wallet.publicKey) {
       fetchState();
     }
   }, [wallet.publicKey, reset]);
-
-  useEffect(() => {
-    const fetchState = async () => {
-      setLoading(true);
-
-      const tokenManagerAcc = await safeFetchTokenManager(
-        umi,
-        tokenManagerPubKey,
-      );
-      setTokenManager(tokenManagerAcc);
-
-      if (tokenManagerAcc) {
-        setOwner(new PublicKey(tokenManagerAcc.owner));
-        setAdmin(new PublicKey(tokenManagerAcc.admin));
-        setGateKeepers(
-          tokenManagerAcc.gateKeepers.map((key) => new PublicKey(key)),
-        );
-      }
-      setLoading(false);
-    };
-
-    if (wallet.publicKey) {
-      fetchState();
-    }
-  }, [wallet.publicKey]);
 
   useEffect(() => {
     const fetchAllowList = async () => {
@@ -331,8 +336,8 @@ export const useSold = () => {
   const handleDeposit = async (depositAmount: number) => {
     setLoading(true);
     try {
-      if (!tokenManager) {
-        throw new Error("Token Manager is not set");
+      if (!tokenManager || !pusdAccount) {
+        throw new Error("Token Manager or PUSD Account is not set");
       }
 
       const amountToDeposit = bigIntWithDecimal(
@@ -341,12 +346,12 @@ export const useSold = () => {
       );
       const quantityAllowed =
         Number(
-          ((tokenManager.totalSupply /
+          ((pusdAccount.supply /
             BigInt(10 ** tokenManager.mintDecimals)) *
             BigInt(tokenManager.exchangeRate)) /
-            BigInt(10 ** tokenManager.quoteMintDecimals) -
-            tokenManager.totalCollateral /
-              BigInt(10 ** tokenManager.quoteMintDecimals),
+          BigInt(10 ** tokenManager.quoteMintDecimals) -
+          tokenManager.totalCollateral /
+          BigInt(10 ** tokenManager.quoteMintDecimals),
         ) *
         10 ** tokenManager.quoteMintDecimals;
 
@@ -359,14 +364,14 @@ export const useSold = () => {
       console.log(
         "TotalSupply: ",
         Number(
-          tokenManager.totalSupply / BigInt(10 ** tokenManager.mintDecimals),
+          pusdAccount.supply / BigInt(10 ** tokenManager.mintDecimals),
         ),
       );
       console.log(
         "TotalCollateral: ",
         Number(
           tokenManager.totalCollateral /
-            BigInt(10 ** tokenManager.quoteMintDecimals),
+          BigInt(10 ** tokenManager.quoteMintDecimals),
         ),
       );
       console.log("Amount entered to deposit:", amountToDeposit);
@@ -385,6 +390,7 @@ export const useSold = () => {
         depositFunds(umi, {
           tokenManager: tokenManagerPubKey,
           quoteMint: tokenManager.quoteMint,
+          mint: tokenManager.mint,
           authorityQuoteMintAta: authorityQuoteMintAta,
           vault: vault,
           admin: umi.identity,
@@ -452,6 +458,7 @@ export const useSold = () => {
           tokenManager: tokenManagerPubKey,
           quantity: convertAmount,
           admin: umi.identity,
+          mint: tokenManager.mint,
         }),
       );
 
@@ -502,6 +509,7 @@ export const useSold = () => {
           authorityQuoteMintAta: authorityQuoteMintAta,
           associatedTokenProgram: SPL_ASSOCIATED_TOKEN_PROGRAM_ID,
           admin: umi.identity,
+          mint: tokenManager.mint,
         }),
       );
 
@@ -554,6 +562,7 @@ export const useSold = () => {
           associatedTokenProgram: SPL_ASSOCIATED_TOKEN_PROGRAM_ID,
           baseMint: poolManager.baseMint,
           vault: vaultPubKey,
+          xMint: poolManager.xMint,
         }),
       );
 
@@ -780,9 +789,7 @@ export const useSold = () => {
           tokenManager: tokenManagerPubKey,
           admin: umi.identity,
           newMerkleRoot: newMerkleRoot,
-          newGateKeepers: none(),
-          newMintLimitPerSlot: none(),
-          newRedemptionLimitPerSlot: none(),
+          newLimitPerSlot: none(),
         }),
       );
 
@@ -804,6 +811,7 @@ export const useSold = () => {
     }
   };
 
+  // TODO: @XtronSolutions refactor completely by splitting into add and remove gatekeeper helper functions that use "addGatekeeper" and "remove gateGateKeeper" functions from sold package 
   const handleUpdateGatekeeper = async (newGatekeeperPublicKeys: string[]) => {
     setLoading(true);
     try {
@@ -818,16 +826,16 @@ export const useSold = () => {
 
       let transactionBuilder = new TransactionBuilder();
 
-      transactionBuilder = transactionBuilder.add(
-        updateTokenManagerAdmin(umi, {
-          tokenManager: tokenManagerPubKey,
-          admin: umi.identity,
-          newMerkleRoot: none(),
-          newGateKeepers: some(newGatekeeperPubKeys),
-          newMintLimitPerSlot: none(),
-          newRedemptionLimitPerSlot: none(),
-        }),
-      );
+      // transactionBuilder = transactionBuilder.add(
+      //   updateTokenManagerAdmin(umi, {
+      //     tokenManager: tokenManagerPubKey,
+      //     admin: umi.identity,
+      //     newMerkleRoot: none(),
+      //     newGateKeepers: some(newGatekeeperPubKeys),
+      //     newMintLimitPerSlot: none(),
+      //     newRedemptionLimitPerSlot: none(),
+      //   }),
+      // );
 
       const resGatekeeperUpdate = await transactionBuilder.sendAndConfirm(umi);
       console.log(bs58.encode(resGatekeeperUpdate.signature));

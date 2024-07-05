@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
-    "@builderz/sold": "^0.1.9",
+    "@builderz/sold": "^0.1.10",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.10.5",
     "@headlessui/react": "^1.7.18",
