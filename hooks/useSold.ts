@@ -32,6 +32,7 @@ import {
   findGatekeeperPda,
   getGatekeeperGpaBuilder,
   deserializeGatekeeper,
+  addGatekeeper,
 } from "@builderz/sold";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
@@ -140,6 +141,11 @@ export const useSold = () => {
         setGateKeepers(
           gateKeepersAcc.map((gatekeeper) => new PublicKey(gatekeeper.wallet)),
         );
+
+        // setGateKeepers(
+        //   [new PublicKey("4GG9RNpVhhH5Q6oqQtMs9wqmeuQBTeVQbXfWyJRJJHv6"),new PublicKey("CixjK33VXQWuRDj1Ddhnf4rqzCKPDbCMJDFur4Thsd6N")]
+        // );
+
 
         // Calculate exchange rate if poolManager is available
         if (poolManagerAcc) {
@@ -853,6 +859,54 @@ export const useSold = () => {
     }
   };
 
+  const handleAddGatekeeper = async (newGatekeeperPublicKey: string) => {
+    setLoading(true);
+    try {
+      if (!tokenManager) {
+        throw new Error("Token Manager is not set");
+      }
+
+      // Ensure all newGatekeeperPublicKeys are valid public keys
+      const newGatekeeperPubKey =  publicKey(newGatekeeperPublicKey);
+      const gatekeeper = findGatekeeperPda(umi, { wallet: newGatekeeperPubKey });
+
+      let txBuilder = new TransactionBuilder();
+      txBuilder = txBuilder.add(addGatekeeper(umi, {
+        tokenManager:tokenManagerPubKey,
+        newGatekeeper: newGatekeeperPubKey,
+        admin: umi.identity,
+        gatekeeper
+      }));
+      
+      // transactionBuilder = transactionBuilder.add(
+      //   updateTokenManagerAdmin(umi, {
+      //     tokenManager: tokenManagerPubKey,
+      //     admin: umi.identity,
+      //     newMerkleRoot: none(),
+      //     newGateKeepers: some(newGatekeeperPubKeys),
+      //     newMintLimitPerSlot: none(),
+      //     newRedemptionLimitPerSlot: none(),
+      //   }),
+      // );
+      const resGatekeeperAdd = await txBuilder.sendAndConfirm(umi, {
+        confirm: { commitment: "confirmed" },
+      });
+      console.log(bs58.encode(resGatekeeperAdd.signature));
+
+      toast.success("Gatekeeper added successfully");
+      //setGateKeepers(newGatekeeperPubKeys.map((key) => new PublicKey(key)));
+      refetch();
+    } catch (e) {
+      console.error("Failed to handle gatekeepers Add:", e);
+      const errorMessage =
+        e instanceof Error ? e.message : "An unknown error occurred";
+      toast.error("Failed to handle gatekeepers Add: " + errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   const handleWithdrawTimeUpdate = async (
     LockTimeSecs: number | null,
     excutionTimeSecs: number | null,
@@ -1028,5 +1082,6 @@ export const useSold = () => {
     handleInitiateOwner,
     handleInitiatePoolOwner,
     handleAcceptUpdatePoolOwner,
+    handleAddGatekeeper,
   };
 };
