@@ -9,7 +9,6 @@ const AdminUpdateModal = ({ setOpen }: any) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
-
   const [loading, setLoading] = useState(false);
 
   const handleClickOutside = (event: React.MouseEvent) => {
@@ -86,6 +85,7 @@ const AdminUpdateModal = ({ setOpen }: any) => {
 export default function AdminUpdate() {
   const sold = useSold();
   const [open, setOpen] = useState(false);
+  const [isDisabled,setIsDisabled] = useState(!sold.getTokenOwnerState());
 
   return (
     <>
@@ -98,7 +98,7 @@ export default function AdminUpdate() {
             <span className="text-xs text-white truncate">
               {sold.admin?.toBase58()}
             </span>
-            <button className="btn btn-sm" onClick={() => setOpen(true)}>
+            <button className="btn btn-sm" disabled={isDisabled} onClick={() => setOpen(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

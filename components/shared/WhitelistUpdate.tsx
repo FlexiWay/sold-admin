@@ -126,6 +126,7 @@ const UpdateModal = ({ open, setOpen }: any) => {
 export default function WhitelistUpdate() {
   const [open, setOpen] = useState(false);
   const sold = useSold();
+  const [isDisabled,setIsDisabled] = React.useState(!sold.getTokenAdminState());
 
   return (
     <>
@@ -137,6 +138,7 @@ export default function WhitelistUpdate() {
           <div className="w-full flex items-center justify-center gap-4">
             {sold.listFetched && (
               <button
+                disabled={isDisabled}
                 className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
                 onClick={() => setOpen(true)}
               >

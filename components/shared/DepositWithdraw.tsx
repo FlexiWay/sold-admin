@@ -12,6 +12,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
 
   const [isExecuteWindow, setIsExecuteWindow] = React.useState(false);
   const [withdrawExpired, setWithdrawExpired] = React.useState(false);
+  const [isDisabled,setIsDisabled] = React.useState(!sold.getTokenAdminState());
 
   useEffect(() => {
     checkTimeWindow();
@@ -46,24 +47,24 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
     const withdrawExecutionWindowDuration =
       Number(withdrawExecutionWindow) * 1000;
 
-    console.log(elapsed);
-    console.log(withdrawTimeLockDuration);
-    console.log(withdrawExecutionWindowDuration);
+    // console.log(elapsed);
+    // console.log(withdrawTimeLockDuration);
+    // console.log(withdrawExecutionWindowDuration);
     if (elapsed < withdrawTimeLockDuration) {
       // Keep running the withdraw time lock timer
-      console.log("running withdraw timer");
+      //console.log("running withdraw timer");
       setIsExecuteWindow(false);
       setWithdrawExpired(false);
     } else if (
       elapsed <
       withdrawTimeLockDuration + withdrawExecutionWindowDuration
     ) {
-      console.log("running execution timer");
+      //console.log("running execution timer");
       // Run withdraw execution timer
       setIsExecuteWindow(true);
       setWithdrawExpired(false);
     } else {
-      console.log("both time has expired");
+      //console.log("both time has expired");
       // Both timers have expired
       setIsExecuteWindow(false);
       setWithdrawExpired(true);
@@ -73,7 +74,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
   return (
     <div className="w-full flex flex-col items-start justify-between gap-2 h-[320px] p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
       <span className="text-xl font-black -mt-2">Deposit/Withdraw</span>
-      <div className="w-full relative flex items-center justify-start">
+      <div className={`${isDisabled?"opacity-[0.2]":""} w-full relative flex items-center justify-start`}>
         <Image
           width={32}
           height={32}
@@ -84,6 +85,7 @@ export const DepositWithdraw = ({ deposit, withdraw }: any) => {
         <input
           type="number"
           placeholder="0"
+          disabled={isDisabled}
           className="input input-bordered w-full bg-transparent !text-transparent"
           // value={inputValue}
           onChange={handleInputChange}

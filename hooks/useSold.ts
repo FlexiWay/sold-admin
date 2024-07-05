@@ -33,6 +33,7 @@ import {
   getGatekeeperGpaBuilder,
   deserializeGatekeeper,
   addGatekeeper,
+  removeGatekeeper,
 } from "@builderz/sold";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { walletAdapterIdentity } from "@metaplex-foundation/umi-signer-wallet-adapters";
@@ -97,6 +98,12 @@ export const useSold = () => {
     setStatCardData,
     listFetched,
     setListFetched,
+    isTokenAdmin,
+    setIsTokenAdmin,
+    isTokenOwner,
+    setIsTokenOwner,
+    isPoolOwner,
+    setIsPoolOwner
   } = useSoldStateContext();
 
   const wallet = useWallet();
@@ -138,14 +145,28 @@ export const useSold = () => {
         const gateKeepersAcc = gateKeepers.map((gatekeeper) => deserializeGatekeeper(gatekeeper));
         console.log("Gatekeeprs: ", gateKeepersAcc);
 
-        setGateKeepers(
-          gateKeepersAcc.map((gatekeeper) => new PublicKey(gatekeeper.wallet)),
-        );
+        setGateKeepers(gateKeepersAcc.map((gatekeeper) => new PublicKey(gatekeeper.wallet)));
 
-        // setGateKeepers(
-        //   [new PublicKey("4GG9RNpVhhH5Q6oqQtMs9wqmeuQBTeVQbXfWyJRJJHv6"),new PublicKey("CixjK33VXQWuRDj1Ddhnf4rqzCKPDbCMJDFur4Thsd6N")]
-        // );
+        if (umi.identity.publicKey === new PublicKey(tokenManagerAcc.owner).toBase58()) {
+          setIsTokenOwner(true);
+        }else
+        {
+          setIsTokenOwner(false);
+        }
 
+        if (umi.identity.publicKey === new PublicKey(tokenManagerAcc.admin).toBase58()) {
+          setIsTokenAdmin(true);
+        }else
+        {
+          setIsTokenAdmin(false);
+        }
+
+        if (umi.identity.publicKey === new PublicKey(poolManagerAcc.owner).toBase58()) {
+          setIsPoolOwner(true);
+        }else
+        {
+          setIsPoolOwner(false);
+        }
 
         // Calculate exchange rate if poolManager is available
         if (poolManagerAcc) {
@@ -268,6 +289,18 @@ export const useSold = () => {
 
   const getConnectedWalletPubKey = () => {
     return umi.identity.publicKey;
+  };
+
+  const getTokenAdminState=()=>{
+    return isTokenAdmin;
+  };
+
+  const getTokenOwnerState=()=>{
+    return isTokenOwner;
+  };
+
+  const getPoolOwnerState=()=>{
+    return isPoolOwner;
   };
 
   const createTestQuoteMint = async (setupOptions: SetupOptions) => {
@@ -866,46 +899,67 @@ export const useSold = () => {
         throw new Error("Token Manager is not set");
       }
 
-      // Ensure all newGatekeeperPublicKeys are valid public keys
-      const newGatekeeperPubKey =  publicKey(newGatekeeperPublicKey);
+      const newGatekeeperPubKey = publicKey(newGatekeeperPublicKey);
       const gatekeeper = findGatekeeperPda(umi, { wallet: newGatekeeperPubKey });
 
       let txBuilder = new TransactionBuilder();
       txBuilder = txBuilder.add(addGatekeeper(umi, {
-        tokenManager:tokenManagerPubKey,
+        tokenManager: tokenManagerPubKey,
         newGatekeeper: newGatekeeperPubKey,
         admin: umi.identity,
         gatekeeper
       }));
-      
-      // transactionBuilder = transactionBuilder.add(
-      //   updateTokenManagerAdmin(umi, {
-      //     tokenManager: tokenManagerPubKey,
-      //     admin: umi.identity,
-      //     newMerkleRoot: none(),
-      //     newGateKeepers: some(newGatekeeperPubKeys),
-      //     newMintLimitPerSlot: none(),
-      //     newRedemptionLimitPerSlot: none(),
-      //   }),
-      // );
+
       const resGatekeeperAdd = await txBuilder.sendAndConfirm(umi, {
         confirm: { commitment: "confirmed" },
       });
       console.log(bs58.encode(resGatekeeperAdd.signature));
 
       toast.success("Gatekeeper added successfully");
-      //setGateKeepers(newGatekeeperPubKeys.map((key) => new PublicKey(key)));
       refetch();
     } catch (e) {
-      console.error("Failed to handle gatekeepers Add:", e);
+      console.error("Failed to handle gatekeeper Add:", e);
       const errorMessage =
         e instanceof Error ? e.message : "An unknown error occurred";
-      toast.error("Failed to handle gatekeepers Add: " + errorMessage);
+      toast.error("Failed to handle gatekeeper Add: " + errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleRemoveGatekeeper = async (gatekeeperPublicKey: string) => {
+    setLoading(true);
+    try {
+      if (!tokenManager) {
+        throw new Error("Token Manager is not set");
+      }
+
+      const gatekeeperPubKey = publicKey(gatekeeperPublicKey);
+      const gatekeeper = findGatekeeperPda(umi, { wallet: gatekeeperPubKey });
+
+      let txBuilder = new TransactionBuilder();
+      txBuilder = txBuilder.add(removeGatekeeper(umi, {
+        tokenManager: tokenManagerPubKey,
+        gatekeeper,
+        admin: umi.identity,
+      }));
+
+      const resGatekeeperRemove = await txBuilder.sendAndConfirm(umi, {
+        confirm: { commitment: "confirmed" },
+      });
+      console.log(bs58.encode(resGatekeeperRemove.signature));
+
+      toast.success("Gatekeeper removed successfully");
+      refetch();
+    } catch (e) {
+      console.error("Failed to handle gatekeeper remove:", e);
+      const errorMessage =
+        e instanceof Error ? e.message : "An unknown error occurred";
+      toast.error("Failed to handle gatekeeper remove: " + errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleWithdrawTimeUpdate = async (
     LockTimeSecs: number | null,
@@ -980,7 +1034,6 @@ export const useSold = () => {
 
     try {
       console.log("Starting metadata update...");
-
       const baseMint = umi.eddsa.findPda(SOLD_ISSUANCE_PROGRAM_ID, [
         Buffer.from("mint"),
       ]);
@@ -1083,5 +1136,9 @@ export const useSold = () => {
     handleInitiatePoolOwner,
     handleAcceptUpdatePoolOwner,
     handleAddGatekeeper,
+    handleRemoveGatekeeper,
+    getTokenAdminState,
+    getTokenOwnerState,
+    getPoolOwnerState
   };
 };

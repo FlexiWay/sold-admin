@@ -5,6 +5,7 @@ import { Spin } from "antd";
 export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
   const sold = useSold();
   const [inputValue, setInputValue] = React.useState(0);
+  const [isDisabled,setIsDisabled] = React.useState(!sold.getTokenOwnerState());
 
   const handleInputChange = (event: { target: { value: string } }) => {
     const value = event.target.value;
@@ -18,12 +19,13 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
     <>
       <div className="w-full flex flex-col items-start justify-between gap-0 h-[320px] p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
         <span className="text-xl font-black -mt-2">Withdraw Time</span>
-        <div className="w-full relative flex items-center justify-start">
+        <div className={`${isDisabled?"opacity-[0.2]":""} w-full relative flex items-center justify-start`}>
           <div className="absolute top-1/2 -translate-y-1/2 left-4 opacity-50 flex flex-col items-start justify-start">
             <span className="font-bold text-[14px]">s</span>
           </div>
           <input
             type="number"
+            disabled={isDisabled}
             //placeholder="0"
             className="input input-bordered w-full bg-transparent !text-transparent text-end"
             value={inputValue}
@@ -49,7 +51,7 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
               onClick={(e) => {
                 sold.handleWithdrawTimeUpdate(inputValue, null);
               }}
-              disabled={inputValue < 0 || sold.loading}
+              disabled={inputValue < 0 || sold.loading || isDisabled}
             >
               {sold.loading ? <Spin size="small" /> : "Update"}
             </button>
@@ -64,7 +66,7 @@ export const WithdrawTimeUpdate = ({ deposit, withdraw }: any) => {
               onClick={(e) => {
                 sold.handleWithdrawTimeUpdate(null, inputValue);
               }}
-              disabled={inputValue < 0 || sold.loading}
+              disabled={inputValue < 0 || sold.loading || isDisabled}
             >
               {sold.loading ? <Spin size="small" /> : "Update"}
             </button>

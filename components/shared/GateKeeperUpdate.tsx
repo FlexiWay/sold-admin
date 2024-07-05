@@ -31,7 +31,7 @@ const GateKeeperModal = ({ open, setOpen }: any) => {
     const trimmedInput = gatekeeperInput.trim();
     if (trimmedInput && isValidPublicKey(trimmedInput)) {
       sold.handleAddGatekeeper(trimmedInput);
-      setGatekeeperInput("");
+      //setGatekeeperInput("");
       setError("");
     } else {
       setError("Invalid Solana public key.");
@@ -39,8 +39,13 @@ const GateKeeperModal = ({ open, setOpen }: any) => {
   };
 
   const handleRemoveClick = (index: number) => {
-    const updatedGatekeepers = sold.gateKeepers.filter((_, i) => i !== index);
-    //sold.handleUpdateGatekeeper(updatedGatekeepers);
+    const walletToRemove = sold.gateKeepers[index];
+    if (walletToRemove) {
+      sold.handleRemoveGatekeeper(walletToRemove.toBase58());
+    }else
+    {
+      setError("Error removing gatekeeper, refresh and try again!");
+    }
   };
 
   return (
@@ -104,6 +109,7 @@ const GateKeeperModal = ({ open, setOpen }: any) => {
 export default function GateKeeperUpdate() {
   const [open, setOpen] = useState(false);
   const sold = useSold();
+  const [isDisabled,setIsDisabled] = React.useState(!sold.getTokenAdminState());
 
   return (
     <>
@@ -114,6 +120,7 @@ export default function GateKeeperUpdate() {
         <div className="w-full">
           <div className="w-full flex items-center justify-center gap-4">
             <button
+              disabled={isDisabled}
               className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
               onClick={() => setOpen(true)}
             >

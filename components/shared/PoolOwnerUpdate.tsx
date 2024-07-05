@@ -11,7 +11,7 @@ const PoolOwnerUpdateModal = ({ open, setOpen }: any) => {
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  
   const handleClickOutside = (event: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       setOpen(false);
@@ -87,6 +87,7 @@ export default function PoolOwnerUpdate() {
   const [open, setOpen] = useState(false);
   const [isPendingOwner, setIsPendingOwner] = useState(false);
   const sold = useSold();
+  const [isDisabled,setIsDisabled] = useState(!sold.getPoolOwnerState());
 
   useEffect(() => {
     try {
@@ -145,7 +146,7 @@ export default function PoolOwnerUpdate() {
                 ? getPendingOwnerPubKey() || getOwnerPubKey()
                 : getOwnerPubKey()}
             </span>
-            <button className="btn btn-sm" onClick={() => setOpen(true)}>
+            <button className="btn btn-sm" disabled={isDisabled} onClick={() => setOpen(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

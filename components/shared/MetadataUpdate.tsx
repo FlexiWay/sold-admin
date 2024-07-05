@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSold } from "../../hooks/useSold";
 import { toast } from "sonner";
 import { Spin } from "antd";
@@ -10,6 +10,8 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState("");
   const [xMintUpdate, setXMintUpdate] = useState(false);
+  const [tokenOwner, setTokenOwner] = useState(sold.getTokenOwnerState());
+  const [poolOwner, setPoolOwner] = useState(sold.getPoolOwnerState());
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,6 +22,22 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
     uri: "",
     xmint: false,
   });
+
+  useEffect(() => {
+    if (!tokenOwner || !poolOwner) {
+      if (!tokenOwner) {
+        setMetadataValues((prev) => ({
+          ...prev,
+          xmint: true,
+        }))
+      } else if (!poolOwner) {
+        setMetadataValues((prev) => ({
+          ...prev,
+          xmint: false,
+        }))
+      }
+    }
+  }, []);
 
   const handleClickOutside = (event: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -109,6 +127,7 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
               <input
                 type="checkbox"
                 className="toggle"
+                disabled={!tokenOwner || !poolOwner}
                 checked={metadataValues.xmint}
                 onChange={() =>
                   setMetadataValues((prev) => ({
@@ -145,6 +164,8 @@ const MetadataUpdateModal = ({ open, setOpen }: any) => {
 export default function MetadataUpdate() {
   const [open, setOpen] = useState(false);
   const sold = useSold();
+  const [tokenOwner, setTokenOwner] = useState(sold.getTokenOwnerState());
+  const [poolOwner, setPoolOwner] = useState(sold.getPoolOwnerState());
 
   return (
     <>
@@ -171,6 +192,7 @@ export default function MetadataUpdate() {
             <button
               className={`w-full h-full rounded-lg text-white py-4 px-8 disabled:cursor-not-allowed uppercase bg-[#1B1E24] ${sold.loading && `text-opacity-50`} disabled:text-gray-80 disabled:text-opacity-20  bg-opacity-100 disabled:bg-opacity-10 hover:bg-opacity-20 ease-in-out transition-all duration-300`}
               onClick={() => setOpen(true)}
+              disabled={!tokenOwner && !poolOwner}
             >
               Update Metdata
             </button>

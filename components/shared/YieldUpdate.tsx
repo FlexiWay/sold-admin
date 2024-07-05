@@ -9,6 +9,7 @@ export function YieldUpdate() {
   const sold = useSold();
   const [inputValue, setInputValue] = useState(""); // Changed to string to allow empty input
   const [yieldValue, setYieldValue] = useState(0); // State to hold the updated yield value
+  const [isDisabled,setIsDisabled] = React.useState(!sold.getTokenAdminState());
   const wallet = useWallet();
 
   const { annualYieldRate, loading } = sold;
@@ -35,7 +36,7 @@ export function YieldUpdate() {
     <div className="w-full flex flex-col items-start justify-between gap-2 h-[320px] p-8 bg-card-bg rounded-lg lg:rounded-xl text-center border border-white border-opacity-10">
       <div className="w-full flex items-center justify-between">
         <span className="text-xl font-black">Yield Update</span>
-        <div className="w-2/5 bg-white bg-opacity-5 border border-white border-opacity-10 rounded-xl py-1 flex items-center justify-center gap-2 text-sm">
+        <div className={`w-2/5 bg-white bg-opacity-5 border border-white border-opacity-10 rounded-xl py-1 flex items-center justify-center gap-2 text-sm`}>
           <span>sPUSD APY</span>
           {annualYieldRate && wallet.publicKey && (
             <span className="bg-apy-gradient text-transparent bg-clip-text">
@@ -44,13 +45,14 @@ export function YieldUpdate() {
           )}
         </div>
       </div>
-      <div className="w-full">
+      <div className={`${isDisabled?"opacity-[0.2]":""} w-full`}>
         <div className="w-full relative flex items-center justify-start -mt-4">
           <div className="absolute top-1/2 -translate-y-1/2 left-4 opacity-50 flex flex-col items-start justify-start">
             <span className="font-bold text-[14px]">%</span>
           </div>
           <input
             type="number"
+            disabled={isDisabled}
             // placeholder="0"
             className="input input-bordered w-full bg-transparent !text-transparent"
             // value={inputValue}
@@ -71,7 +73,8 @@ export function YieldUpdate() {
           disabled={
             isNaN(parseInt(inputValue, 10)) ||
             parseInt(inputValue, 10) < 0 ||
-            parseInt(inputValue, 10) > 100
+            parseInt(inputValue, 10) > 100 ||
+            isDisabled
           }
         >
           {sold.loading ? (

@@ -43,6 +43,15 @@ interface SoldStateContextType {
 
   listFetched: boolean;
   setListFetched: React.Dispatch<React.SetStateAction<boolean>>;
+
+  isTokenAdmin: boolean;
+  setIsTokenAdmin: React.Dispatch<React.SetStateAction<boolean>>;
+
+  isTokenOwner: boolean;
+  setIsTokenOwner: React.Dispatch<React.SetStateAction<boolean>>;
+
+  isPoolOwner: boolean;
+  setIsPoolOwner: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SoldStateContext = createContext<SoldStateContextType | null>(null);
@@ -71,6 +80,9 @@ export const SoldStateProvider = ({ children }: any) => {
   });
 
   const [listFetched, setListFetched] = useState<boolean>(false);
+  const [isTokenAdmin, setIsTokenAdmin] = useState<boolean>(false);
+  const [isTokenOwner, setIsTokenOwner] = useState<boolean>(false);
+  const [isPoolOwner, setIsPoolOwner] = useState<boolean>(false);
 
   return (
     <SoldStateContext.Provider
@@ -97,6 +109,12 @@ export const SoldStateProvider = ({ children }: any) => {
         setReset,
         statCardData,
         setStatCardData,
+        isTokenAdmin,
+        setIsTokenAdmin,
+        isTokenOwner,
+        setIsTokenOwner,
+        isPoolOwner,
+        setIsPoolOwner
       }}
     >
       {children}

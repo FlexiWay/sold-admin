@@ -87,6 +87,7 @@ export default function OwnerUpdate() {
   const [open, setOpen] = useState(false);
   const [isPendingOwner, setIsPendingOwner] = useState(false);
   const sold = useSold();
+  const [isDisabled,setIsDisabled] = useState(!sold.getTokenOwnerState());
 
   useEffect(() => {
     try {
@@ -140,7 +141,7 @@ export default function OwnerUpdate() {
                 ? getPendingOwnerPubKey() || sold.owner?.toBase58()
                 : sold.owner?.toBase58()}
             </span>
-            <button className="btn btn-sm" onClick={() => setOpen(true)}>
+            <button className="btn btn-sm" disabled={isDisabled} onClick={() => setOpen(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
